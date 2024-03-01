@@ -11,3 +11,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 }).addTo(map);
 
 map.setMaxBounds([[90, -180], [-90, 180]]);
+
+
+

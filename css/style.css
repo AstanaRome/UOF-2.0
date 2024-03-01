@@ -23,6 +23,7 @@ body, html {
 
 .header {
     display: flex;
+    justify-content: center;
      /* Изменено для распределения пространства */
     align-items: center;
     background-color: black;
@@ -39,8 +40,9 @@ body, html {
 
 .logo-section {
     height: 40px;
-    filter: drop-shadow(0 0 5px white);    
-    width: 30%;
+    filter: drop-shadow(0 0 5px white);
+    justify-content: center;    
+    width: 25%;
 }
 
 .logo-section .logo {
@@ -50,7 +52,7 @@ body, html {
 
 .dates-section {    
     justify-content: center;
-    width: 40%;
+    width: 50%;
 }
 .dates-section label {
     display: flex;
@@ -92,7 +94,7 @@ body, html {
     display: flex;
     justify-content: left; /* Центрируем кнопку по горизонтали */
     align-items: center; /* Центрируем кнопку по вертикали */
-    width: 30%; /* Задаем ширину 33% */
+    width: 25%; /* Задаем ширину 33% */
 }
 
 
@@ -127,3 +129,23 @@ body, html {
     width: 20%;
 }
 
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+        border-left: none;
+    }
+
+    .header {
+        flex-direction: column;
+    }
+
+    .logo-section, .dates-section, .button-section {
+        width: 100%;
+    }
+
+    .dates-section label:not(:first-child) {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
