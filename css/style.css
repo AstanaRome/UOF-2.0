@@ -1,0 +1,129 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: flex;
+    height: calc(100% - 50px);
+}
+
+#map {
+    flex-grow: 1;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: whitesmoke;
+    padding: 20px;
+    border-left: 2px solid #C0C0C0; /* Линия слева */
+}
+
+.header {
+    display: flex;
+     /* Изменено для распределения пространства */
+    align-items: center;
+    background-color: black;
+    color: white; /* Для улучшения видимости текста */
+    padding-left: 20px; /* Добавлен отступ для всей шапки */
+    padding-right: 20px;
+    /* padding-top: 5px; */
+    /* padding-bottom: 5px; */
+}
+
+.header-section {
+    display: flex;
+}
+
+.logo-section {
+    height: 40px;
+    filter: drop-shadow(0 0 5px white);    
+    width: 30%;
+}
+
+.logo-section .logo {
+    height: 40px;
+    filter: drop-shadow(0 0 5px white);
+}
+
+.dates-section {    
+    justify-content: center;
+    width: 40%;
+}
+.dates-section label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    height: 2em;
+    min-width: 8em;
+    line-height: 2em; /* Центрируем текст по вертикали */
+}
+
+
+.dates-section .date-input {
+    color: black;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    height: 2em;
+    min-width: 8em;
+}
+
+
+
+
+.dates-section label:not(:first-child) {
+    margin-left: 10px; /* Отступ между элементами дат */
+}
+
+.button-section {
+    display: flex;
+    justify-content: left; /* Центрируем кнопку по горизонтали */
+    align-items: center; /* Центрируем кнопку по вертикали */
+    width: 30%; /* Задаем ширину 33% */
+}
+
+
+.header-button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    height: 3em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.header-button:hover {
+    background-color: #0056b3;
+}
+
+/* Добавьте дополнительные стили здесь при необходимости */
+
+.processing-container {
+    height: 30%; /* Просто чтобы показать высоту */
+    background-color: lightblue; /* Цвет фона, можете изменить на любой */
+}
+
+#dataTable th:not(:nth-child(3)) {
+    width: calc((25% - 20px) / 4); /* Равномерное распределение оставшегося пространства на 4 столбца */
+    padding-left: 5px; /* Добавляем левый отступ */
+    padding-right: 5px; /* Добавляем правый отступ */
+}
+#dataTable th:nth-child(2) {
+    width: 10%;
+}
+

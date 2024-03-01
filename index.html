@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="header">
+    <!-- Див для логотипа -->
+    <div class="header-section logo-section">
+        <img src="assets/logo_kgs.png" alt="Логотип" class="logo">
+    </div>
+
+    <!-- Див для дат -->
+    <div class="header-section dates-section">
+        <label for="startDate" >Начальная дата:</label>
+        <input type="date" id="startDate" class="date-input">
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" id="endDate" class="date-input">
+    </div>
+
+    <!-- Третий див, который можно использовать для другого контента или удалить -->
+    <div class="header-section button-section">
+      <button type="button" class="header-button">Upload KML</button>
+  </div>
+</div>
+
+
+    <div class="container">
+        <div id="map"></div>
+        <div class="sidebar">
+            <div class="processing-container"></div>
+            <div id="imageData" class="data-container">
+                <h2>Таблица данных</h2>
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th><i class="fa-solid fa-basket-shopping"></i></th> <!-- Галочка -->
+                            <th><i class="fa-regular fa-image"></i></th> <!-- Quicklook -->
+                            <th style="width: 75%;">Satellite ID</th> <!-- ID -->
+                            <th><i class="fas fa-info-circle"></i></th> <!-- Information -->
+                            <th><i class="fas fa-eye"></i></th> <!-- Visibility -->
+                            <th><i class="fas fa-search-location"></i></th> <!-- Zoom -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Сюда будет добавляться содержимое таблицы с помощью JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
+    <script type="module" src="./js/map.js" type="text/javascript" ></script>
+    <script src="./js/dateSetup.js" type="text/javascript"></script>
+</body>
+</html>
