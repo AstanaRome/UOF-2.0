@@ -2,12 +2,15 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    width: 100%;
     font-family: 'Roboto', sans-serif;
 }
 
 .container {
     display: flex;
     height: calc(100% - 50px);
+    max-width: none;
+    padding: 0;
 }
 
 #map {
@@ -149,3 +152,10 @@ body, html {
         margin-top: 10px;
     }
 }
+
+
+
+/* Создание черного квадрата на иконке инструмента рисования */
+
+
+

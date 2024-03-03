@@ -1,7 +1,10 @@
+
+const endDateInput = document.getElementById('endDate');
+const startDateInput = document.getElementById('startDate');
+
+
 document.addEventListener('DOMContentLoaded', function() {
     
-    const endDateInput = document.getElementById('endDate');
-    const startDateInput = document.getElementById('startDate');
 
     const today = new Date();
     const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
@@ -9,3 +12,23 @@ document.addEventListener('DOMContentLoaded', function() {
     endDateInput.valueAsDate = today;
     startDateInput.valueAsDate = lastWeek;
 });
+
+// Добавляем обработчики событий для изменений в полях даты
+endDateInput.addEventListener('change', handleDateChange);
+startDateInput.addEventListener('change', handleDateChange);
+
+function handleDateChange() {
+    // Получаем новые значения дат из полей ввода
+    const endDate = endDateInput.valueAsDate;
+    const startDate = startDateInput.valueAsDate;
+
+    // Делаем что-то с полученными датами, например, выводим их в консоль
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
+
+    // Здесь вы можете выполнить любые другие действия в зависимости от изменений даты
+}
+
+
+
+

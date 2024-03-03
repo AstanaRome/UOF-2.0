@@ -1,11 +1,16 @@
+import SatelliteImage from "./SatelliteImage.js";
+const imageDataArray = []
+
+
 function searchCatalog(options) {
     // Проверка, переданы ли только координаты
-    
+
     // Формирование URL
     const { dateFrom, dateTo, west, east, south, north } = options;
     // Формирование URL
-    var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
-     fetch(path)
+    var path = "http://10.0.6.117:8001/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
+    //var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
+    fetch(path)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -13,19 +18,23 @@ function searchCatalog(options) {
             return response.json();
         })
         .then(data => {
-            console.log('Data:', data);
+            console.log("test1")
+            data.data.forEach(item => {
+                const satelliteImage = new SatelliteImage(item);
+                imageDataArray.push(satelliteImage);
+                
+                // Дальнейшие действия с полученными данными
+            });
             // Дальнейшие действия с полученными данными
         })
+
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
         });
 }
 
 
-// Другие функции для обработки данных и взаимодействия с интерфейсом
-function processData(data) {
-    // Ваша функция обработки данных сюда
-}
+
 
 // Экспорт функций для использования в других модулях
-export { searchCatalog, processData };
+export { searchCatalog, imageDataArray };
