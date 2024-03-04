@@ -50,6 +50,7 @@ var drawControl = new L.Control.Draw(drawOptions);
         removeOneLayerFromMap(layer)
       }
 
+    removeLayerFromMap(footprintGroupLayer);
     layer = e.layer;      
     drawnItems.addLayer(layer);
     
@@ -65,9 +66,7 @@ var drawControl = new L.Control.Draw(drawOptions);
 
     const option = new  SearchOption(inputStartDate, inputEndDate, west, east, south, north)
     searchCatalog(option)
-    console.log("test2")
-    createFootprintGroup(imageDataArray);
-    console.log(imageDataArray)
+    
 
 
 
@@ -75,11 +74,8 @@ var drawControl = new L.Control.Draw(drawOptions);
 
 
 function createFootprintGroup(imagesDataArray) { 
-    console.log("test3")   
     imagesDataArray.forEach(imageData => {
-        console.log("test4")
-        console.log(imageData.getCoordinatesForFootprint().topLeft)
-        footprintGroup = L.imageOverlay.rotated("icon.svg", imageData.getCoordinatesForFootprint().topLeft, getCoordinatesForFootprint().topRight, getCoordinatesForFootprint().bottomLeft, {
+        const footprintGroup = L.imageOverlay.rotated("icon.svg", imageData.getCoordinatesForFootprint().topLeft, imageData.getCoordinatesForFootprint().topRight, imageData.getCoordinatesForFootprint().bottomLeft, {
             opacity: 1,
             interactive: true,
         })//.bindPopup(name)
@@ -142,7 +138,7 @@ function removeOneLayerFromMap(layer) {
 
 
 
-export { map, removeLayerFromMap };
+export { map, removeLayerFromMap, createFootprintGroup };
 // Использование функции
 
 

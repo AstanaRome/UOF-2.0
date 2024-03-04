@@ -22,9 +22,6 @@ function handleDateChange() {
     const endDate = endDateInput.valueAsDate;
     const startDate = startDateInput.valueAsDate;
 
-    // Делаем что-то с полученными датами, например, выводим их в консоль
-    console.log('Start Date:', startDate);
-    console.log('End Date:', endDate);
 
     // Здесь вы можете выполнить любые другие действия в зависимости от изменений даты
 }

@@ -1,10 +1,12 @@
 import SatelliteImage from "./SatelliteImage.js";
+import { fillTableWithSatelliteImages } from "./main.js";
+import { createFootprintGroup } from "./map.js";
 const imageDataArray = []
 
 
 function searchCatalog(options) {
     // Проверка, переданы ли только координаты
-
+    imageDataArray.length = 0;
     // Формирование URL
     const { dateFrom, dateTo, west, east, south, north } = options;
     // Формирование URL
@@ -18,14 +20,16 @@ function searchCatalog(options) {
             return response.json();
         })
         .then(data => {
-            console.log("test1")
             data.data.forEach(item => {
                 const satelliteImage = new SatelliteImage(item);
+                console.log(satelliteImage.Code)
                 imageDataArray.push(satelliteImage);
                 
                 // Дальнейшие действия с полученными данными
             });
             // Дальнейшие действия с полученными данными
+            createFootprintGroup(imageDataArray);
+            //fillTableWithSatelliteImages(imageDataArray)
         })
 
         .catch(error => {
@@ -37,4 +41,4 @@ function searchCatalog(options) {
 
 
 // Экспорт функций для использования в других модулях
-export { searchCatalog, imageDataArray };
+export { searchCatalog, imageDataArray, createFootprintGroup };
