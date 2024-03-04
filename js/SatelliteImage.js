@@ -12,6 +12,8 @@ export default class SatelliteImage {
         this.Satellite = data.Satellite || null;
         this.South = data.South || null;
         this.West = data.West || null;
+        this.IsChecked = data.IsChecked || false;
+        this.IsVisibleOnMap = data.IsVisibleOnMap || false;
         // Добавьте другие свойства при необходимости
     }
 

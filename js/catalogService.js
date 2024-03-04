@@ -29,7 +29,7 @@ function searchCatalog(options) {
             });
             // Дальнейшие действия с полученными данными
             createFootprintGroup(imageDataArray);
-            //fillTableWithSatelliteImages(imageDataArray)
+            fillTableWithSatelliteImages(imageDataArray)
         })
 
         .catch(error => {

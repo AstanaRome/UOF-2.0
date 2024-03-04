@@ -1,161 +1,194 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Roboto', sans-serif;
+@charset "UTF-8";
+/* Добавьте дополнительные стили здесь при необходимости */
+/* Стили для ячеек таблицы для центрирования содержимого */
+/* Создание черного квадрата на иконке инструмента рисования */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
 }
 
 .container {
-    display: flex;
-    height: calc(100% - 50px);
-    max-width: none;
-    padding: 0;
+  display: flex;
+  height: calc(100% - 50px);
+  max-width: none;
+  padding: 0;
 }
 
 #map {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .sidebar {
-    width: 25%;
-    background-color: whitesmoke;
-    padding: 20px;
-    border-left: 2px solid #C0C0C0; /* Линия слева */
+  width: 30%;
+  background-color: whitesmoke;
+  padding: 20px;
+  border-left: 2px solid #C0C0C0;
 }
 
 .header {
-    display: flex;
-    justify-content: center;
-     /* Изменено для распределения пространства */
-    align-items: center;
-    background-color: black;
-    color: white; /* Для улучшения видимости текста */
-    padding-left: 20px; /* Добавлен отступ для всей шапки */
-    padding-right: 20px;
-    /* padding-top: 5px; */
-    /* padding-bottom: 5px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .header-section {
-    display: flex;
+  display: flex;
 }
 
 .logo-section {
-    height: 40px;
-    filter: drop-shadow(0 0 5px white);
-    justify-content: center;    
-    width: 25%;
+  height: 40px;
+  filter: drop-shadow(0 0 5px white);
+  justify-content: center;
+  width: 25%;
 }
-
 .logo-section .logo {
-    height: 40px;
-    filter: drop-shadow(0 0 5px white);
+  height: 40px;
+  filter: drop-shadow(0 0 5px white);
 }
 
-.dates-section {    
-    justify-content: center;
-    width: 50%;
+.dates-section {
+  justify-content: center;
+  width: 50%;
 }
 .dates-section label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    background-color: white;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    padding: 0.5em 1em;
-    border: 1px solid #ccc;
-    border-radius: 0.5em;
-    height: 2em;
-    min-width: 8em;
-    line-height: 2em; /* Центрируем текст по вертикали */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  background-color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  height: 2em;
+  min-width: 8em;
+  line-height: 2em;
 }
-
-
-.dates-section .date-input {
-    color: black;
-    background-color: white;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    padding: 0.5em 1em;
-    border: 1px solid #ccc;
-    border-radius: 0.5em;
-    height: 2em;
-    min-width: 8em;
-}
-
-
-
-
 .dates-section label:not(:first-child) {
-    margin-left: 10px; /* Отступ между элементами дат */
+  margin-left: 10px;
+}
+.dates-section .date-input {
+  color: black;
+  background-color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  height: 2em;
+  min-width: 8em;
 }
 
 .button-section {
-    display: flex;
-    justify-content: left; /* Центрируем кнопку по горизонтали */
-    align-items: center; /* Центрируем кнопку по вертикали */
-    width: 25%; /* Задаем ширину 33% */
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 25%;
 }
-
 
 .header-button {
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    height: 3em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  height: 3em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-
 .header-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
-
-/* Добавьте дополнительные стили здесь при необходимости */
 
 .processing-container {
-    height: 30%; /* Просто чтобы показать высоту */
-    background-color: lightblue; /* Цвет фона, можете изменить на любой */
+  height: 30%;
+  background-color: lightblue;
 }
 
+#dataTable {
+  display: block;
+  border: 1px solid #ccc;
+  text-align: center;
+  max-height: 500px;
+  overflow-y: auto;
+}
+#dataTable th, #dataTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
 #dataTable th:not(:nth-child(3)) {
-    width: calc((25% - 20px) / 4); /* Равномерное распределение оставшегося пространства на 4 столбца */
-    padding-left: 5px; /* Добавляем левый отступ */
-    padding-right: 5px; /* Добавляем правый отступ */
+  width: calc((25% - 20px) / 4);
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #dataTable th:nth-child(2) {
-    width: 20%;
+  width: 20%;
+}
+#dataTable tr {
+  border-bottom: 1px solid #ccc;
+}
+
+.table-cell {
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-regular {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fa-solid {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fas {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        padding: 10px;
-        border-left: none;
-    }
-
-    .header {
-        flex-direction: column;
-    }
-
-    .logo-section, .dates-section, .button-section {
-        width: 100%;
-    }
-
-    .dates-section label:not(:first-child) {
-        margin-left: 0;
-        margin-top: 10px;
-    }
-}
-
-
-
-/* Создание черного квадрата на иконке инструмента рисования */
-
-
-
+  .sidebar {
+    width: 100%;
+    padding: 10px;
+    border-left: none;
+  }
+  .header {
+    flex-direction: column;
+  }
+  .logo-section {
+    width: 100%;
+  }
+  .dates-section {
+    width: 100%;
+  }
+  .dates-section label:not(:first-child) {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  .button-section {
+    width: 100%;
+  }
+}/*# sourceMappingURL=style.css.map */

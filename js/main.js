@@ -14,12 +14,15 @@ function fillTableWithSatelliteImages(images) {
         let quicklookCell = document.createElement('td');
         let img = document.createElement('img');
         img.src = image.Quicklook;
-        img.style.width = '50px'; // Пример ограничения размера изображения
+        img.style.width = '50px'; // Ограничение ширины изображения
+        img.style.height = '50px'; // Ограничение высоты изображения
+        img.style.objectFit = 'cover'; // Обеспечение сохранения пропорций изображения без искажений
         quicklookCell.appendChild(img);
         row.appendChild(quicklookCell);
 
         // Добавление Satellite ID
         let satelliteIDCell = document.createElement('td');
+        satelliteIDCell.style.fontSize = '12px';
         satelliteIDCell.appendChild(document.createTextNode(image.Code));
         row.appendChild(satelliteIDCell);
 
@@ -28,7 +31,23 @@ function fillTableWithSatelliteImages(images) {
         row.appendChild(infoCell);
 
         let visibilityCell = document.createElement('td');
+        let visibilityIcon = document.createElement('i');
+        if (image.IsVisibleOnMap) {
+            visibilityIcon.className = 'fas fa-eye'; // Иконка для видимого состояния
+        } else {
+            visibilityIcon.className = 'fas fa-eye-slash'; // Иконка для невидимого состояния
+        }
+        visibilityCell.appendChild(visibilityIcon);
         row.appendChild(visibilityCell);
+
+        visibilityIcon.addEventListener('click', () => {
+            image.IsVisibleOnMap = !image.IsVisibleOnMap; // Изменение значения
+            
+            visibilityIcon.className = image.IsVisibleOnMap ? 'fas fa-eye' : 'fas fa-eye-slash'; // Изменение иконки
+        });
+
+
+
 
         let zoomCell = document.createElement('td');
         row.appendChild(zoomCell);
@@ -37,4 +56,4 @@ function fillTableWithSatelliteImages(images) {
     });
 }
 
-export {fillTableWithSatelliteImages};
+export { fillTableWithSatelliteImages };

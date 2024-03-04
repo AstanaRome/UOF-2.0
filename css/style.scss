@@ -1,0 +1,195 @@
+$color_1: white;
+$color_2: black;
+$font-family_1: 'Roboto', sans-serif;
+$background-color_1: whitesmoke;
+$background-color_2: black;
+$background-color_3: white;
+$background-color_4: #007bff;
+$background-color_5: #0056b3;
+$background-color_6: lightblue;
+
+/* Добавьте дополнительные стили здесь при необходимости */
+/* Стили для ячеек таблицы для центрирования содержимого */
+/* Создание черного квадрата на иконке инструмента рисования */
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: $font-family_1;
+}
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: $font-family_1;
+}
+.container {
+	display: flex;
+	height: calc(100% - 50px);
+	max-width: none;
+	padding: 0;
+}
+#map {
+	flex-grow: 1;
+}
+.sidebar {
+	width: 30%;
+	background-color: $background-color_1;
+	padding: 20px;
+	border-left: 2px solid #C0C0C0;
+}
+.header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $background-color_2;
+	color: $color_1;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.header-section {
+	display: flex;
+}
+.logo-section {
+	height: 40px;
+	filter: drop-shadow(0 0 5px white);
+	justify-content: center;
+	width: 25%;
+	.logo {
+		height: 40px;
+		filter: drop-shadow(0 0 5px white);
+	}
+}
+.dates-section {
+	justify-content: center;
+	width: 50%;
+	label {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: $color_2;
+		background-color: $background-color_3;
+		font-family: $font-family_1;
+		font-size: 1em;
+		padding: 0.5em 1em;
+		border: 1px solid #ccc;
+		border-radius: 0.5em;
+		height: 2em;
+		min-width: 8em;
+		line-height: 2em;
+		&:not(:first-child) {
+			margin-left: 10px;
+		}
+	}
+	.date-input {
+		color: $color_2;
+		background-color: $background-color_3;
+		font-family: $font-family_1;
+		font-size: 1em;
+		padding: 0.5em 1em;
+		border: 1px solid #ccc;
+		border-radius: 0.5em;
+		height: 2em;
+		min-width: 8em;
+	}
+}
+.button-section {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	width: 25%;
+}
+.header-button {
+	font-family: $font-family_1;
+	font-size: 16px;
+	color: $color_1;
+	background-color: $background-color_4;
+	border: none;
+	height: 3em;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	&:hover {
+		background-color: $background-color_5;
+	}
+}
+.processing-container {
+	height: 30%;
+	background-color: $background-color_6;
+}
+#dataTable {
+	display: block;
+    border: 1px solid #ccc; // Граница вокруг всей таблицы
+	text-align: center;
+	max-height: 500px;
+	overflow-y: auto;
+
+	th, td {
+		border: 1px solid #ccc; // Добавление границ для ячеек
+		padding: 10px;
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	th {
+		&:not(:nth-child(3)) {
+			width: calc((25% - 20px) / 4);
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		&:nth-child(2) {
+			width: 20%;
+		}
+	}
+
+	tr {
+	    border-bottom: 1px solid #ccc; // Добавление границ между строками
+	}
+}
+
+
+.table-cell {
+	text-align: center;
+	vertical-align: middle;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.fa-regular {
+	display: inline-block;
+	vertical-align: middle;
+}
+.fa-solid {
+	display: inline-block;
+	vertical-align: middle;
+}
+.fas {
+	display: inline-block;
+	vertical-align: middle;
+}
+@media (max-width: 768px) {
+	.sidebar {
+		width: 100%;
+		padding: 10px;
+		border-left: none;
+	}
+	.header {
+		flex-direction: column;
+	}
+	.logo-section {
+		width: 100%;
+	}
+	.dates-section {
+		width: 100%;
+		label {
+			&:not(:first-child) {
+				margin-left: 0;
+				margin-top: 10px;
+			}
+		}
+	}
+	.button-section {
+		width: 100%;
+	}
+}
