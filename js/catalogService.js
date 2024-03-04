@@ -10,8 +10,8 @@ function searchCatalog(options) {
     // Формирование URL
     const { dateFrom, dateTo, west, east, south, north } = options;
     // Формирование URL
-    var path = "http://10.0.6.117:8001/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
-    //var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
+    // var path = "http://10.0.6.117:8001/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
+    var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
     fetch(path)
         .then(response => {
             if (!response.ok) {
@@ -22,7 +22,6 @@ function searchCatalog(options) {
         .then(data => {
             data.data.forEach(item => {
                 const satelliteImage = new SatelliteImage(item);
-                console.log(satelliteImage.Code)
                 imageDataArray.push(satelliteImage);
                 
                 // Дальнейшие действия с полученными данными

@@ -30,7 +30,7 @@ html {
 }
 
 .sidebar {
-  width: 30%;
+  width: 40%;
   background-color: whitesmoke;
   padding: 20px;
   border-left: 2px solid #C0C0C0;
@@ -125,7 +125,7 @@ html {
   display: block;
   border: 1px solid #ccc;
   text-align: center;
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: auto;
 }
 #dataTable th, #dataTable td {
@@ -191,4 +191,9 @@ html {
   .button-section {
     width: 100%;
   }
+}
+input[type=checkbox] {
+  transform: scale(1.5); /* Увеличивает чекбокс в 1.5 раза */
+  margin: 10px; /* Добавляет отступы вокруг чекбокса */
+  cursor: pointer;
 }/*# sourceMappingURL=style.css.map */

@@ -74,14 +74,22 @@ var drawControl = new L.Control.Draw(drawOptions);
 
 
 function createFootprintGroup(imagesDataArray) { 
-    imagesDataArray.forEach(imageData => {
-        const footprintGroup = L.imageOverlay.rotated("icon.svg", imageData.getCoordinatesForFootprint().topLeft, imageData.getCoordinatesForFootprint().topRight, imageData.getCoordinatesForFootprint().bottomLeft, {
-            opacity: 1,
-            interactive: true,
-        })//.bindPopup(name)
-        //footprintGroup.popupContent = name;
-        footprintGroupLayer.addLayer(footprintGroup);
-    });
+  imagesDataArray.forEach(imageData => {
+      const coordinates = imageData.getCoordinatesForFootprint();
+      const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+          opacity: 1,
+          interactive: true,
+      });
+      footprintGroup.setZIndex(400);
+      // Пример добавления всплывающего окна с названием изображения
+      footprintGroup.bindPopup(imageData.Code);
+
+      // Добавление слоя footprintGroup в общий слой footprintGroupLayer
+      footprintGroupLayer.addLayer(footprintGroup);
+     
+  });
+}
+
     
     
 
@@ -109,7 +117,7 @@ function createFootprintGroup(imagesDataArray) {
     // });
 
     
-}
+
 
 
 

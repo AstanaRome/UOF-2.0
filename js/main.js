@@ -1,3 +1,7 @@
+import { map } from "./map.js";
+
+
+
 
 function fillTableWithSatelliteImages(images) {
     const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
@@ -6,9 +10,21 @@ function fillTableWithSatelliteImages(images) {
     images.forEach(image => {
         let row = document.createElement('tr');
 
-        // Добавление галочки (пример использования ячейки без данных)
         let checkCell = document.createElement('td');
+        let checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = image.IsChecked; // Устанавливаем состояние чекбокса на основе свойства объекта
+        console.log(imageData.IsChecked)
+        // Установка обработчика событий, если нужно выполнить действие при изменении состояния чекбокса
+        checkbox.addEventListener('change', (e) => {
+            // Обновляем свойство объекта в соответствии с изменением состояния чекбокса
+            imageData.isChecked = e.target.checked;
+            console.log(`Checkbox for row is now: ${e.target.checked ? 'checked' : 'unchecked'}`);
+        });
+        checkCell.appendChild(checkbox);
         row.appendChild(checkCell);
+        
+
 
         // Добавление Quicklook
         let quicklookCell = document.createElement('td');
@@ -22,7 +38,7 @@ function fillTableWithSatelliteImages(images) {
 
         // Добавление Satellite ID
         let satelliteIDCell = document.createElement('td');
-        satelliteIDCell.style.fontSize = '12px';
+        satelliteIDCell.style.fontSize = '11px';
         satelliteIDCell.appendChild(document.createTextNode(image.Code));
         row.appendChild(satelliteIDCell);
 
@@ -42,7 +58,7 @@ function fillTableWithSatelliteImages(images) {
 
         visibilityIcon.addEventListener('click', () => {
             image.IsVisibleOnMap = !image.IsVisibleOnMap; // Изменение значения
-            
+
             visibilityIcon.className = image.IsVisibleOnMap ? 'fas fa-eye' : 'fas fa-eye-slash'; // Изменение иконки
         });
 
@@ -50,7 +66,28 @@ function fillTableWithSatelliteImages(images) {
 
 
         let zoomCell = document.createElement('td');
+        let zoomIcon = document.createElement('i');
+        zoomIcon.className = 'fas fa-search-plus'; // Иконка зума из FontAwesome
+        zoomCell.appendChild(zoomIcon);
         row.appendChild(zoomCell);
+
+        zoomIcon.addEventListener('click', () => {
+            const splitCoords = image.Coordinates.split(" ").map(Number);
+            let sumLat = 0, sumLng = 0;
+
+            for (let i = 0; i < splitCoords.length; i += 2) {
+                sumLat += splitCoords[i];
+                sumLng += splitCoords[i + 1];
+            }
+
+            const centerLat = sumLat / (splitCoords.length / 2);
+            const centerLng = sumLng / (splitCoords.length / 2);
+
+            // Использование координат, например, для установки центра карты
+            map.setView([centerLat, centerLng], 7);
+
+
+        });
 
         tableBody.appendChild(row);
     });
