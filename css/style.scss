@@ -200,5 +200,50 @@ input[type="checkbox"] {
 	cursor: pointer;
   }
   
-
+  $color_1: #aaa;
+  $color_2: black;
+  $background-color_1: rgb(0,0,0);
+  $background-color_2: rgba(0,0,0,0.4);
+  $background-color_3: #fefefe;
+  
+  .modal {
+	  display: none;
+	  position: fixed;
+	  z-index: 10000;
+	  left: 0;
+	  top: 0;
+	  width: 100%;
+	  height: 100%;
+	  overflow: auto;
+	  background-color: $background-color_1;
+	  background-color: $background-color_2;
+  }
+  .modal-content {
+	  background-color: $background-color_3;
+	  margin: 15% auto;
+	  padding: 20px;
+	  border: 1px solid #888;
+	  width: 80%;
+  }
+  .close {
+	  color: $color_1;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	  &:hover {
+		  color: $color_2;
+		  text-decoration: none;
+		  cursor: pointer;
+	  }
+	  &:focus {
+		  color: $color_2;
+		  text-decoration: none;
+		  cursor: pointer;
+	  }
+  }
+  #modalImage {
+	  width: 100%;
+	  height: auto;
+  }
+  
 
