@@ -17,7 +17,7 @@ map.setMaxBounds([[90, -180], [-90, 180]]);
 const footprintGroupLayer = L.layerGroup();
 footprintGroupLayer.addTo(map);
 
-
+let footprintLayers = {};
 
 var layer;
 
@@ -98,6 +98,7 @@ function createFootprintGroup(imagesDataArray) {
             });
             // Добавление слоя footprintGroup в общий слой footprintGroupLayer
             footprintGroupLayer.addLayer(footprintGroup);
+            footprintLayers[imageData.Code] = footprintGroup;
         }
     });
 
@@ -108,28 +109,24 @@ function removeLayerFromMap(layerGroup) {
         layerGroup.clearLayers();
     }
 }
-function removeOneLayerFromMap(layer) {
-    if (layer != undefined) {
-        map.removeLayer(layer);
+
+function removeFromFootprintGroupLayer(code) {
+    const layerRemove = footprintLayers[code];
+    console.log("test");
+    if (layerRemove) {
+        footprintGroupLayer.removeLayer(layerRemove); // Удаляем слой из группового слоя
+        delete footprintLayers[code]; // Удаляем ссылку на слой из объекта
+    } else {
+        console.log("Layer with code", code, "not found.");
     }
 }
 
 
-function removeFromFootprintGroupLayer(codeToRemove) {
-    console.log(codeToRemove)
-    footprintGroupLayer.eachLayer((layer) => {
-        if (layer.options.id === codeToRemove) { // Проверяем, соответствует ли id слоя удаляемому коду
-            footprintGroupLayer.removeLayer(layer); // Удаляем слой из группового слоя
-        }
-    });
-}
 
 
 
 
-
-
-export { map, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer };
+export { map, footprintLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer };
 // Использование функции
 
 
