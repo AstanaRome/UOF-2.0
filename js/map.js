@@ -1,5 +1,5 @@
 import { imageDataArray, searchCatalog } from "./catalogService.js";
-import SearchOption  from "./SearchOption.js"
+import SearchOption from "./SearchOption.js"
 
 // Создание карты с использованием CartoDB
 const map = L.map('map', {
@@ -22,38 +22,38 @@ footprintGroupLayer.addTo(map);
 var layer;
 
 var drawnItems = new L.FeatureGroup();
-  map.addLayer(drawnItems);
+map.addLayer(drawnItems);
 
-  // Настройки для рисования полигонов (в данном случае - квадратов)
-  var drawOptions = {
+// Настройки для рисования полигонов (в данном случае - квадратов)
+var drawOptions = {
     draw: {
-      rectangle: {}, // Опции для квадрата (оставляем пустыми для включения)
-      polygon: false, // Отключаем рисование полигонов (и других фигур)
-      polyline: false, // Отключаем рисование линий
-      circle: false, // Отключаем рисование кругов
-      circlemarker: false, // Отключаем рисование маркеров-кругов
-      marker: false,
+        rectangle: {}, // Опции для квадрата (оставляем пустыми для включения)
+        polygon: false, // Отключаем рисование полигонов (и других фигур)
+        polyline: false, // Отключаем рисование линий
+        circle: false, // Отключаем рисование кругов
+        circlemarker: false, // Отключаем рисование маркеров-кругов
+        marker: false,
 
-      
-      // Задайте другие опции для рисования здесь
+
+        // Задайте другие опции для рисования здесь
     },
     edit: false,
     remove: false
-  };
+};
 
 var drawControl = new L.Control.Draw(drawOptions);
-  map.addControl(drawControl);
+map.addControl(drawControl);
 
-  // Обработчик события при завершении рисования полигона
-  map.on('draw:created', function (e) {
-      if(layer != undefined){
+// Обработчик события при завершении рисования полигона
+map.on('draw:created', function (e) {
+    if (layer != undefined) {
         removeOneLayerFromMap(layer)
-      }
+    }
 
     removeLayerFromMap(footprintGroupLayer);
-    layer = e.layer;      
+    layer = e.layer;
     drawnItems.addLayer(layer);
-    
+
     var rectangle = layer.toGeoJSON();
     var coordinates = rectangle.geometry.coordinates[0]; // Координаты хранятся в свойстве "coordinates"
 
@@ -64,69 +64,44 @@ var drawControl = new L.Control.Draw(drawOptions);
     const inputStartDate = document.getElementById('startDate').value;
     const inputEndDate = document.getElementById('endDate').value;
 
-    const option = new  SearchOption(inputStartDate, inputEndDate, west, east, south, north)
+    const option = new SearchOption(inputStartDate, inputEndDate, west, east, south, north)
     searchCatalog(option)
-    
+
 
 
 
 });
 
 
-function createFootprintGroup(imagesDataArray) { 
-  imagesDataArray.forEach(imageData => {
-      const coordinates = imageData.getCoordinatesForFootprint();
-      const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
-          opacity: 1,
-          interactive: true,
-      });
-      footprintGroup.setZIndex(400);
-      // Пример добавления всплывающего окна с названием изображения
-      footprintGroup.bindPopup(imageData.Code);
+function createFootprintGroup(imagesDataArray) {
+    imagesDataArray.forEach(imageData => {
+        if (imageData.IsChecked == true) {
+            const coordinates = imageData.getCoordinatesForFootprint();
+            const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+                opacity: 1,
+                interactive: true,
+            });
+            footprintGroup.setZIndex(400);
+            // Пример добавления всплывающего окна с названием изображения
+            footprintGroup.bindPopup(imageData.Code);
+            footprintGroup.on('click', () => {
+                document.querySelectorAll('#dataTable tr').forEach(row => {
+                    row.style.backgroundColor = ''; // Сброс цвета фона
+                });
 
-      // Добавление слоя footprintGroup в общий слой footprintGroupLayer
-      footprintGroupLayer.addLayer(footprintGroup);
-     
-  });
+                // Выделяем соответствующую строку
+                const relatedRow = document.getElementById(`row-${imageData.Code}`);
+                if (relatedRow) {
+                    relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
+                    relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            // Добавление слоя footprintGroup в общий слой footprintGroupLayer
+            footprintGroupLayer.addLayer(footprintGroup);
+        }
+    });
+
 }
-
-    
-    
-
-   
-
-    
-
-
-    
-   
-
-
-    // footprintGroup.on('click', function(e) {
-    //    // inputId.value = name;
-    //    // findImage();
-       
-    //     // В этом месте вы можете выполнить любые действия для отображения информации о слое
-    //     // Например, отобразить всплывающее окно (popup) с информацией
-    //     var popup = L.popup()
-    //         .setLatLng(e.latlng) // Устанавливаем положение всплывающего окна там, где был сделан клик
-    //         .setContent(name) // Здесь должна быть ваша информация о слое
-    //         .openOn(map);
-    //         var content = popup.getContent();
-    //         findImage(content);
-    // });
-
-    
-
-
-
-
-
-
-
-
-
-
 
 function removeLayerFromMap(layerGroup) {
     if (layerGroup != undefined) {
@@ -140,18 +115,25 @@ function removeOneLayerFromMap(layer) {
 }
 
 
+function removeFromFootprintGroupLayer(codeToRemove) {
+    console.log(codeToRemove)
+    footprintGroupLayer.eachLayer((layer) => {
+        if (layer.options.id === codeToRemove) { // Проверяем, соответствует ли id слоя удаляемому коду
+            footprintGroupLayer.removeLayer(layer); // Удаляем слой из группового слоя
+        }
+    });
+}
 
 
 
 
 
 
-export { map, removeLayerFromMap, createFootprintGroup };
+export { map, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer };
 // Использование функции
 
 
 
 
-    
 
-    
+

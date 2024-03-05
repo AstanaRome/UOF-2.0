@@ -1,4 +1,4 @@
-import { map } from "./map.js";
+import { createFootprintGroup, map, removeFromFootprintGroupLayer } from "./map.js";
 
 
 
@@ -9,21 +9,28 @@ function fillTableWithSatelliteImages(images) {
 
     images.forEach(image => {
         let row = document.createElement('tr');
-
+        row.setAttribute('id', `row-${image.Code}`);
         let checkCell = document.createElement('td');
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = image.IsChecked; // Устанавливаем состояние чекбокса на основе свойства объекта
-        console.log(imageData.IsChecked)
         // Установка обработчика событий, если нужно выполнить действие при изменении состояния чекбокса
         checkbox.addEventListener('change', (e) => {
             // Обновляем свойство объекта в соответствии с изменением состояния чекбокса
-            imageData.isChecked = e.target.checked;
-            console.log(`Checkbox for row is now: ${e.target.checked ? 'checked' : 'unchecked'}`);
+            image.IsChecked = e.target.checked;
+            //console.log(`Checkbox for row is now: ${e.target.checked ? 'checked' : 'unchecked'}`);
+            const tempArr = [];
+            tempArr.push(image);
+            if (image.IsChecked == true) {
+                createFootprintGroup(tempArr);
+            }
+            else {
+                removeFromFootprintGroupLayer(image.Code);
+            }
         });
         checkCell.appendChild(checkbox);
         row.appendChild(checkCell);
-        
+
 
 
         // Добавление Quicklook
@@ -55,7 +62,7 @@ function fillTableWithSatelliteImages(images) {
         }
         visibilityCell.appendChild(visibilityIcon);
         row.appendChild(visibilityCell);
-
+        visibilityIcon.style.cursor = 'pointer';
         visibilityIcon.addEventListener('click', () => {
             image.IsVisibleOnMap = !image.IsVisibleOnMap; // Изменение значения
 
@@ -69,6 +76,7 @@ function fillTableWithSatelliteImages(images) {
         let zoomIcon = document.createElement('i');
         zoomIcon.className = 'fas fa-search-plus'; // Иконка зума из FontAwesome
         zoomCell.appendChild(zoomIcon);
+        zoomIcon.style.cursor = 'pointer';
         row.appendChild(zoomCell);
 
         zoomIcon.addEventListener('click', () => {

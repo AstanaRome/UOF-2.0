@@ -125,7 +125,7 @@ html {
   display: block;
   border: 1px solid #ccc;
   text-align: center;
-  max-height: 400px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 #dataTable th, #dataTable td {
