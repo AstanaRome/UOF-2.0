@@ -1,4 +1,4 @@
-import { createFootprintGroup, map, removeFromFootprintGroupLayer } from "./map.js";
+import { createFootprintGroup, createQuicklookGroup, map, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer } from "./map.js";
 
 function createModal() {
     // Создаем контейнер модального окна
@@ -78,16 +78,25 @@ function createQuicklookCell(image) {
     img.style.width = '50px';
     img.style.height = '50px';
     img.style.objectFit = 'cover';
-
+    img.addEventListener('click', () => {
+        createQuicklookGroup([image])
+    });
     let quicklookCell = document.createElement('td');
     quicklookCell.appendChild(img);
     return quicklookCell;
 }
 
-function createTextCell(text, fontSize = '11px') {
+function createTextCell(image, fontSize = '11px') {
     let cell = document.createElement('td');
     cell.style.fontSize = fontSize;
-    cell.appendChild(document.createTextNode(text));
+    cell.appendChild(document.createTextNode(image.Code));
+
+    // Создание обработчика события mouseover
+    cell.addEventListener('mouseover', () => hoverAction(image));
+
+    // Создание обработчика события mouseout
+    cell.addEventListener('mouseout', () => hoverOutAction(image));
+
     return cell;
 }
 
@@ -99,6 +108,15 @@ function createVisibilityCell(image) {
     visibilityIcon.addEventListener('click', () => {
         image.IsVisibleOnMap = !image.IsVisibleOnMap;
         visibilityIcon.className = image.IsVisibleOnMap ? 'fas fa-eye' : 'fas fa-eye-slash';
+        if (visibilityIcon.className === 'fas fa-eye') {
+            // Если иконка показывает открытый глаз, выполняем одну функцию
+            // Например, показываем объект на карте
+            createQuicklookGroup([image])
+        } else {
+            // Иначе, если иконка показывает закрытый глаз, выполняем другую функцию
+            // Например, скрываем объект на карте
+            removeFromQuicklookGroupLayer(image.Code)
+        }
     });
 
     let visibilityCell = document.createElement('td');
@@ -122,7 +140,7 @@ function createZoomCell(image) {
 
         const centerLat = sumLat / (splitCoords.length / 2);
         const centerLng = sumLng / (splitCoords.length / 2);
-
+        
         // Использование координат, например, для установки центра карты
         map.setView([centerLat, centerLng], 7);
         // Логика зума
@@ -142,6 +160,7 @@ function createZoomCell(image) {
 
 
 function fillTableWithSatelliteImages(images) {
+    
     const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = ''; // Очистка содержимого tbody
 
@@ -151,13 +170,33 @@ function fillTableWithSatelliteImages(images) {
 
         row.appendChild(createCheckboxCell(image));
         row.appendChild(createQuicklookCell(image));
-        row.appendChild(createTextCell(image.Code));
+        row.appendChild(createTextCell(image));
         addInfoButtonToRow(row, image); 
         row.appendChild(createVisibilityCell(image));
         row.appendChild(createZoomCell(image));
 
         tableBody.appendChild(row);
     });
+}
+
+function hoverAction(image) {
+    // Проверяем, установлен ли флажок в чекбоксе
+    if (image.IsChecked) {
+        return; // Не выполняем никаких действий
+    }
+
+    // В противном случае вызываем функцию создания следа
+    createFootprintGroup([image]);
+}
+
+function hoverOutAction(image) {
+    // Проверяем, установлен ли флажок в чекбоксе
+    if (image.IsChecked) {
+        return; // Не выполняем никаких действий
+    }
+
+    // В противном случае вызываем функцию удаления следа
+    removeFromFootprintGroupLayer(image.Code);
 }
 
 

@@ -15,9 +15,12 @@ map.setMaxBounds([[90, -180], [-90, 180]]);
 
 
 const footprintGroupLayer = L.layerGroup();
+const QuicklookGroupLayer = L.layerGroup();
 footprintGroupLayer.addTo(map);
+QuicklookGroupLayer.addTo(map);
 
 let footprintLayers = {};
+let quicklookLayers = {};
 
 var layer;
 
@@ -49,7 +52,9 @@ map.on('draw:created', function (e) {
     if (layer != undefined) {
         removeOneLayerFromMap(layer)
     }
-
+    footprintLayers = {};
+    quicklookLayers = {};
+    removeLayerFromMap(QuicklookGroupLayer);
     removeLayerFromMap(footprintGroupLayer);
     layer = e.layer;
     drawnItems.addLayer(layer);
@@ -74,9 +79,11 @@ map.on('draw:created', function (e) {
 
 
 function createFootprintGroup(imagesDataArray) {
-    imagesDataArray.forEach(imageData => {
-        if (imageData.IsChecked == true) {
+    imagesDataArray.forEach(imageData => {    
             const coordinates = imageData.getCoordinatesForFootprint();
+    
+              
+   
             const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
                 opacity: 1,
                 interactive: true,
@@ -99,9 +106,48 @@ function createFootprintGroup(imagesDataArray) {
             // Добавление слоя footprintGroup в общий слой footprintGroupLayer
             footprintGroupLayer.addLayer(footprintGroup);
             footprintLayers[imageData.Code] = footprintGroup;
-        }
+     
     });
 
+}
+
+
+function createQuicklookGroup(imagesDataArray) {
+    imagesDataArray.forEach(imageData => {    
+            const coordinates = imageData.getCoordinatesForFootprint();  
+            const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+                opacity: 1,
+                interactive: true,
+            });
+            QuicklookGroup.setZIndex(400);
+            // Пример добавления всплывающего окна с названием изображения
+            QuicklookGroup.bindPopup(imageData.Code);
+            QuicklookGroup.on('click', () => {
+                document.querySelectorAll('#dataTable tr').forEach(row => {
+                    row.style.backgroundColor = ''; // Сброс цвета фона
+                });
+
+                // Выделяем соответствующую строку
+                const relatedRow = document.getElementById(`row-${imageData.Code}`);
+                if (relatedRow) {
+                    relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
+                    relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+            // Добавление слоя footprintGroup в общий слой footprintGroupLayer
+            QuicklookGroupLayer.addLayer(QuicklookGroup);
+            quicklookLayers[imageData.Code] = QuicklookGroup;
+     
+    });
+
+}
+
+
+
+function removeOneLayerFromMap(layer) {
+    if (layer != undefined) {
+        map.removeLayer(layer);
+    }
 }
 
 function removeLayerFromMap(layerGroup) {
@@ -112,9 +158,18 @@ function removeLayerFromMap(layerGroup) {
 
 function removeFromFootprintGroupLayer(code) {
     const layerRemove = footprintLayers[code];
-    console.log("test");
     if (layerRemove) {
         footprintGroupLayer.removeLayer(layerRemove); // Удаляем слой из группового слоя
+        delete footprintLayers[code]; // Удаляем ссылку на слой из объекта
+    } else {
+        console.log("Layer with code", code, "not found.");
+    }
+}
+
+function removeFromQuicklookGroupLayer(code) {
+    const layerRemove = quicklookLayers[code];
+    if (layerRemove) {
+        QuicklookGroupLayer.removeLayer(layerRemove); // Удаляем слой из группового слоя
         delete footprintLayers[code]; // Удаляем ссылку на слой из объекта
     } else {
         console.log("Layer with code", code, "not found.");
@@ -124,9 +179,7 @@ function removeFromFootprintGroupLayer(code) {
 
 
 
-
-
-export { map, footprintLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer };
+export { map, footprintLayers, quicklookLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, createQuicklookGroup, removeFromQuicklookGroupLayer };
 // Использование функции
 
 

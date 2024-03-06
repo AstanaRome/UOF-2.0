@@ -10,8 +10,8 @@ function searchCatalog(options) {
     // Формирование URL
     const { dateFrom, dateTo, west, east, south, north } = options;
     // Формирование URL  
-    //  var path = "http://10.0.6.117:8001/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
-    var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
+     var path = "http://10.0.6.117:8001/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
+    // var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" + dateFrom + "&DateTo=" + dateTo + "&West="+ west + "&East="+ east + "&South="+ south + "&North=" + north;
     fetch(path)
         .then(response => {
             if (!response.ok) {
@@ -27,7 +27,12 @@ function searchCatalog(options) {
                 // Дальнейшие действия с полученными данными
             });
             // Дальнейшие действия с полученными данными
-            createFootprintGroup(imageDataArray);
+            //createFootprintGroup(imageDataArray);
+            imageDataArray.sort((a, b) => {
+                if (b.Code < a.Code) return -1;
+                if (b.Code > a.Code) return 1;
+                return 0;
+            });
             fillTableWithSatelliteImages(imageDataArray)
         })
 
