@@ -130,12 +130,23 @@ html {
 	margin-top: 2vh;
 	margin-left: 0.7vh;
 	font-weight: bold;
+
+	
+	  @media (min-height: 510px) and (max-height: 800px) {
+		margin-top: 0px;
+		font-weight: bold;
+		margin-bottom: 0;
+	  }
 }
 
 #angle{
 	margin-left: 0.7vh;
 }
 
+
+
+/* Дополнительные медиа-запросы для других разрешений */
+/* ... */
 
 #dataTable {
 	display: block;

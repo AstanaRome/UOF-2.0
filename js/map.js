@@ -1,5 +1,6 @@
-import { imageDataArray, searchCatalog } from "./catalogService.js";
-import SearchOption from "./SearchOption.js"
+import { imageDataArray, searchCatalog } from "./service/catalogService.js";
+import SearchOption from "./models/SearchOption.js"
+import SatelliteImage from "./models/SatelliteImage.js"
 
 // Создание карты с использованием CartoDB
 const map = L.map('map', {
@@ -69,19 +70,20 @@ map.on('draw:created', function (e) {
     const inputStartDate = document.getElementById('startDate').value;
     const inputEndDate = document.getElementById('endDate').value;
 
-    const option = new SearchOption(inputStartDate, inputEndDate, west, east, south, north)
+    const selectedSatellites = Array.from(document.querySelectorAll('input[name="satellite"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    // Получаем угол
+    const angle = parseInt(document.getElementById('angle').value); // для целого числа
+    const option = new SearchOption(inputStartDate, inputEndDate, west, east, south, north, selectedSatellites, angle);
     searchCatalog(option)
-
-
-
-
 });
 
 
-function createFootprintGroup(imagesDataArray) {
-    imagesDataArray.forEach(imageData => {    
+function createFootprintGroup(imageDataArray) {
+    imageDataArray.forEach(imageData => {    
             const coordinates = imageData.getCoordinatesForFootprint();
-    
+            console.log(imageData.Lines)
               
    
             const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
