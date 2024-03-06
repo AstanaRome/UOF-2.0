@@ -118,7 +118,24 @@ html {
 
 .processing-container {
   height: 30%;
-  background-color: lightblue;
+  display: flex;
+  flex-direction: row; /* Располагаем дочерние элементы горизонтально */
+  align-items: stretch; /* Растягиваем дочерние элементы по высоте */
+}
+
+.processing-container > * {
+  flex: 1; /* Делим доступное пространство поровну между дочерними элементами */
+  border: 1px solid black; /* Добавляем рамку для визуализации разделения */
+}
+
+.filter-title {
+  margin-top: 2vh;
+  margin-left: 0.7vh;
+  font-weight: bold;
+}
+
+#angle {
+  margin-left: 0.7vh;
 }
 
 #dataTable {

@@ -46,7 +46,33 @@
     <div class="container">
         <div id="map"></div>
         <div class="sidebar">
-            <div class="processing-container"></div>
+            <div class="processing-container">
+                <div class="filter-container">
+                    <div class="satellite-selection">
+                        <h6 class="filter-title">Космический аппарат</h6>
+                        <!-- Выбор космического аппарата -->
+                        <div>
+                            <input type="checkbox" id="kazeosat1" name="satellite" value="KazEOSat-1">
+                            <label for="kazeosat1">KazEOSat-1</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="kazeosat2" name="satellite" value="KazEOSat-2">
+                            <label for="kazeosat2">KazEOSat-2</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="perusat1" name="satellite" value="PeruSat-1">
+                            <label for="perusat1">PeruSat-1</label>
+                        </div>
+                    </div>
+                    <div class="angle-selection">
+                        <h6 class="filter-title">Угол съемки</h6>
+                        <!-- Выбор угла снимка -->
+                        <input type="number" id="angle" name="angle" min="0" max="45" step="1">
+                    </div>
+                    </div>
+                    
+                    <div></div>
+                    </div>
             <div id="imageData" class="data-container">
                 <h2>Таблица данных</h2>
                 <table id="dataTable">

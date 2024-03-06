@@ -78,9 +78,6 @@ function createQuicklookCell(image) {
     img.style.width = '50px';
     img.style.height = '50px';
     img.style.objectFit = 'cover';
-    img.addEventListener('click', () => {
-        createQuicklookGroup([image])
-    });
     let quicklookCell = document.createElement('td');
     quicklookCell.appendChild(img);
     return quicklookCell;
@@ -140,7 +137,9 @@ function createZoomCell(image) {
 
         const centerLat = sumLat / (splitCoords.length / 2);
         const centerLng = sumLng / (splitCoords.length / 2);
-        
+        const marker = L.marker([centerLat, centerLng]).addTo(map);
+        // Можно также добавить всплывающее окно для маркера
+        marker.bindPopup(image.Code).openPopup();
         // Использование координат, например, для установки центра карты
         map.setView([centerLat, centerLng], 7);
         // Логика зума
