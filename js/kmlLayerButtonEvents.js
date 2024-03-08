@@ -1,5 +1,6 @@
 
 import { map, removeLayerFromMap } from './map.js';
+import { searchOneImage } from './service/catalogService.js';
 
 const kmlLayerGroup = L.layerGroup().addTo(map);
 
@@ -89,6 +90,31 @@ function handleKMZData(kmzData) {
         console.error(error);
     });
 }
+
+
+
+const btnFind = document.getElementById('btnFind');
+const inputSatelliteId = document.getElementById('inputSatelliteId');
+
+btnFind.addEventListener('click', function() {
+    const imageID = inputSatelliteId.value;
+    if (imageID) {
+        searchOneImage(imageID);
+    } else {
+        // Пользователь не ввел ID снимка
+        console.error('Please enter the image ID');
+    }
+});
+
+
+
+
+
+
+
+
+
+
 
 
 function getCoordinatesFromKML(kml) {

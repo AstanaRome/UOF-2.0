@@ -17,7 +17,7 @@ export default class SatelliteImage {
           if (data.Code.startsWith('DS_')) {
               this.calculateLines(data.Quicklook)
                   .then(lines => {
-                      this.Lines = lines;                      
+                      this.Lines = lines;                
                   })
                   .catch(error => {
                       console.error('Ошибка при вычислении lines:', error.message);
@@ -54,26 +54,24 @@ export default class SatelliteImage {
         return null;
     }
 
-    calculateLines(imageUrl) {
-        // Возвращает Promise, который разрешается значением maxLine
-        return getImageSize(imageUrl)
-            .then(size => {
-                let maxLine = Math.round(size.height / (size.width / 125) * 5 - 5);
-                if (maxLine % 5 !== 0) {
-                    if (maxLine % 5 >= 6) {
-                        maxLine -= maxLine % 5 - 10;
-                    } else if (maxLine % 5 < 6 && maxLine % 5 > 1) {
-                        maxLine -= maxLine % 5 - 5;
-                    } else {
-                        maxLine -= maxLine % 5;
-                    }
+    async calculateLines(imageUrl) {
+        try {
+            const size = await getImageSize(imageUrl);
+            let maxLine = Math.round(size.height / (size.width / 125) * 5 - 5);
+            if (maxLine % 5 !== 0) {
+                if (maxLine % 5 >= 6) {
+                    maxLine -= maxLine % 5 - 10;
+                } else if (maxLine % 5 < 6 && maxLine % 5 > 1) {
+                    maxLine -= maxLine % 5 - 5;
+                } else {
+                    maxLine -= maxLine % 5;
                 }
-                return maxLine;
-            })
-            .catch(error => {
-                console.error('Ошибка при получении размера изображения:', error.message);
-                throw error; // Пробрасываем ошибку дальше, чтобы её можно было обработать
-            });
+            }
+            return maxLine;
+        } catch (error) {
+            console.error('Ошибка при получении размера изображения:', error.message);
+            throw error;
+        }
     }
 }
 

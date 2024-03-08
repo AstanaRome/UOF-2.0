@@ -1,4 +1,11 @@
-import { createFootprintGroup, createQuicklookGroup, map, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer } from "./map.js";
+
+
+import { createFootprintGroup, createQuicklookGroup, map, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
+
+const inputFirstLineNum = document.getElementById('inputFirstLineNum');
+const inputLineMax = document.getElementById('inputLineCount');
+
+
 
 function createModal() {
     // Создаем контейнер модального окна
@@ -127,22 +134,7 @@ function createZoomCell(image) {
     zoomIcon.style.cursor = 'pointer';
 
     zoomIcon.addEventListener('click', () => {
-        const splitCoords = image.Coordinates.split(" ").map(Number);
-        let sumLat = 0, sumLng = 0;
-
-        for (let i = 0; i < splitCoords.length; i += 2) {
-            sumLat += splitCoords[i];
-            sumLng += splitCoords[i + 1];
-        }
-
-        const centerLat = sumLat / (splitCoords.length / 2);
-        const centerLng = sumLng / (splitCoords.length / 2);
-        const marker = L.marker([centerLat, centerLng]).addTo(map);
-        // Можно также добавить всплывающее окно для маркера
-        marker.bindPopup(image.Code).openPopup();
-        // Использование координат, например, для установки центра карты
-        map.setView([centerLat, centerLng], 7);
-        // Логика зума
+        zoomToImage(image);
     });
 
     let zoomCell = document.createElement('td');
@@ -199,4 +191,4 @@ function hoverOutAction(image) {
 }
 
 
-export { fillTableWithSatelliteImages };
+export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax };

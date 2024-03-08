@@ -17,6 +17,8 @@ map.setMaxBounds([[90, -180], [-90, 180]]);
 
 const footprintGroupLayer = L.layerGroup();
 const QuicklookGroupLayer = L.layerGroup();
+let oneFootprint;
+let oneQucklook;
 footprintGroupLayer.addTo(map);
 QuicklookGroupLayer.addTo(map);
 
@@ -82,9 +84,7 @@ map.on('draw:created', function (e) {
 
 function createFootprintGroup(imageDataArray) {
     imageDataArray.forEach(imageData => {    
-            const coordinates = imageData.getCoordinatesForFootprint();
-            console.log(imageData.Lines)
-              
+            const coordinates = imageData.getCoordinatesForFootprint();          
    
             const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
                 opacity: 1,
@@ -112,6 +112,32 @@ function createFootprintGroup(imageDataArray) {
     });
 
 }
+
+
+function createOneFootprint(oneImage) {
+    const coordinates = oneImage.getCoordinatesForFootprint();   
+    removeOneLayerFromMap(oneFootprint);   
+    oneFootprint = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+        opacity: 1,
+        interactive: true,
+    });
+    oneFootprint.setZIndex(400);
+    oneFootprint.addTo(map);
+
+}
+
+function createOneQuicklook(oneImage){
+    removeOneLayerFromMap(oneQucklook);  
+    const coordinates = oneImage.getCoordinatesForFootprint();      
+    oneQucklook = L.imageOverlay.rotated(oneImage.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+        opacity: 1,
+        interactive: true,
+    });
+    oneQucklook.addTo(map);
+}
+
+
+
 
 
 function createQuicklookGroup(imagesDataArray) {
@@ -143,6 +169,13 @@ function createQuicklookGroup(imagesDataArray) {
     });
 
 }
+
+
+
+
+
+
+
 
 
 
@@ -178,10 +211,25 @@ function removeFromQuicklookGroupLayer(code) {
     }
 }
 
+function zoomToImage(image) {
+    const splitCoords = image.Coordinates.split(" ").map(Number);
+    let sumLat = 0, sumLng = 0;
+
+    for (let i = 0; i < splitCoords.length; i += 2) {
+        sumLat += splitCoords[i];
+        sumLng += splitCoords[i + 1];
+    }
+
+    const centerLat = sumLat / (splitCoords.length / 2);
+    const centerLng = sumLng / (splitCoords.length / 2);
+
+    // Установка центра карты и зума
+    map.setView([centerLat, centerLng], 7); 
+}
 
 
-
-export { map, footprintLayers, quicklookLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, createQuicklookGroup, removeFromQuicklookGroupLayer };
+export { map, footprintLayers, quicklookLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
+    createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage };
 // Использование функции
 
 
