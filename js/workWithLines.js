@@ -1,67 +1,92 @@
+import { inputFirstLineNum, inputLineMax } from "./main.js";
+import { createOneFootprint, oneFootprint, removeOneLayerFromMap } from "./map.js";
+import { foundImage } from "./service/catalogService.js";
 
+
+let newCoordTopLeft = undefined;
+let newCoordBottomLeft = undefined;
+let newCoordTopRight = undefined;
 
 function endLine(enteredValue){
     if (isNaN(enteredValue)) { // Проверяем, является ли введенное значение числом
         // Если введенное значение не является числом, сбрасываем поле ввода
-        inputEndLine.value = '';
+        inputLineMax.value = '';
     } else if (enteredValue < 1) {
         // Если введенное значение превышает максимальное, устанавливаем максимальное значение
-        inputEndLine.value = 1;
-    } else if (enteredValue > maxLine) {
-        inputEndLine.value = maxLine
+        inputLineMax.value = 1;
+    } else if (enteredValue > foundImage.Lines) {
+        inputLineMax.value = foundImage.Lines
     }
-    var value = inputEndLine.value;
-    labelRes.textContent = "Numbers of lines: " + (inputEndLine.value - inputFirstLine.value + 1).toString();
+    var value = inputLineMax.value;
+    
+    if(value > foundImage.Lines){
+        value = foundImage.Lines;
+    }
+   // labelRes.textContent = "Numbers of lines: " + (inputEndLine.value - inputFirstLine.value + 1).toString();
 
-    var diffDistance = value * LineToKm;
-
-    newCoordBottomLeft = calculateCoordinates(topleftFootprint.lat, topleftFootprint.lng, bottomleftFootprint.lat, bottomleftFootprint.lng, diffDistance);
-
+    var diffDistance = value * foundImage.LineToKm;
+    const footprintCoordinates = foundImage.getCoordinatesForFootprint();
+    newCoordBottomLeft = calculateCoordinates(
+        footprintCoordinates.topLeft.lat,
+        footprintCoordinates.topLeft.lng,
+        footprintCoordinates.bottomLeft.lat,
+        footprintCoordinates.bottomLeft.lng,
+        diffDistance
+    );
 
     if (newCoordTopLeft == undefined) {
-        createFootprint(topleftFootprint, toprightFootprint, newCoordBottomLeft);
+        createOneFootprint(footprintCoordinates.topLeft, footprintCoordinates.topRight, newCoordBottomLeft);
     } else {
-        removeEmptyLayer(footprint)
-        createFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft);
+        removeOneLayerFromMap(oneFootprint)
+        createOneFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft);
     }
 }
 
 function firstLine(enteredValue){
     if (isNaN(enteredValue)) {
-        inputFirstLine.value = '';
-    } else if (enteredValue > maxLine) {
+        inputFirstLineNum.value = '';
+    } else if (enteredValue > foundImage.Lines) {
         // Если введенное значение превышает максимальное, устанавливаем максимальное значение
-        inputFirstLine.value = maxLine;
+        inputFirstLineNum.value = foundImage.Lines;
     } else if (enteredValue < 1) {
         // Если введенное значение превышает максимальное, устанавливаем максимальное значение
-        inputFirstLine.value = 1;
+        inputFirstLineNum.value = 1;
     }
-    else if (enteredValue > (inputEndLine.value - 623)) {
+    else if (enteredValue > (foundImage.Lines - 623)) {
         // Если введенное значение превышает максимальное, устанавливаем максимальное значение
-        inputFirstLine.value = inputEndLine.value - 623;
+        inputFirstLineNum.value = inputLineMax.value - 623;
     }
-    var valueFirstLine = inputFirstLine.value;
-    labelRes.textContent = "Numbers of lines: " +  (inputEndLine.value - inputFirstLine.value + 1).toString();
 
 
+    const footprintCoordinates = foundImage.getCoordinatesForFootprint();
+    var diffDistance = inputFirstLineNum.value * foundImage.LineToKm;
 
-
-    var diffDistance = valueFirstLine * LineToKm;
-    newCoordTopLeft = calculateCoordinates(topleftFootprint.lat, topleftFootprint.lng, bottomleftFootprint.lat, bottomleftFootprint.lng, diffDistance);
-    newCoordTopRight = calculateCoordinates(toprightFootprint.lat, toprightFootprint.lng, bottomrightFootprint.lat, bottomrightFootprint.lng, diffDistance);
-
-
-
-
-
-
-
+    newCoordTopLeft = calculateCoordinates(
+        footprintCoordinates.topLeft.lat,
+        footprintCoordinates.topLeft.lng,
+        footprintCoordinates.bottomLeft.lat,
+        footprintCoordinates.bottomLeft.lng,
+        diffDistance
+    );
+    
+    newCoordTopRight = calculateCoordinates(
+        footprintCoordinates.topRight.lat,
+        footprintCoordinates.topRight.lng,
+        footprintCoordinates.bottomRight.lat,
+        footprintCoordinates.bottomRight.lng,
+        diffDistance
+    );
+    
     if (newCoordBottomLeft == undefined) {
-        createFootprint(newCoordTopLeft, newCoordTopRight, bottomleftFootprint);
+        createOneFootprint(newCoordTopLeft, newCoordTopRight, footprintCoordinates.bottomLeft);
     } else {
-        removeEmptyLayer(footprint)
-        createFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft);
+        console.log(newCoordBottomLeft)
+        console.log(newCoordTopRight)
+        console.log(newCoordTopLeft)
+        removeOneLayerFromMap(oneFootprint);
+        createOneFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft)
     }
+  ;   
 }
 
 function calculateCoordinates(startLat, startLng, endLat, endLng, distance) {
@@ -103,5 +128,5 @@ function calculateCoordinates(startLat, startLng, endLat, endLng, distance) {
 
 
 
-
+export { firstLine, endLine}
 

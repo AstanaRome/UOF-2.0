@@ -1,14 +1,15 @@
+import { inputFirstLineNum, inputLineMax } from "../main.js";
 import { foundImage } from "../service/catalogService.js";
+import { firstLine, endLine } from "../workWithLines.js";
 
 const slider = document.getElementById('slider');
 
 // Создаем слайдер
 function createSliderWithStartValue(imageData) {
-    console.log(imageData.Lines)
     // Проверяем, что imageData.Lines не null и является числом
     if (imageData.Lines !== null && typeof imageData.Lines === 'number') {
         noUiSlider.create(slider, {
-            start: [20, imageData.Lines], // Начальные значения
+            start: [1, imageData.Lines], // Начальные значения
             connect: true, // Соединяем ползунки линией
             orientation: 'vertical',
             margin: 623,
@@ -34,7 +35,22 @@ function createSliderWithStartValue(imageData) {
     } else {
         console.error("Invalid value for imageData.Lines");
     }
+
+
+
+        slider.noUiSlider.on('update', function (values, handle) {
+        if (handle == 0){
+            inputFirstLineNum.value = values[handle];
+            firstLine(inputFirstLineNum.value)
+        }
+        else{
+            inputLineMax.value = values[handle]
+            endLine(inputLineMax.value)
+        }
+        //createFootprint();
+    });
 }
+
 
 
 
@@ -84,7 +100,6 @@ function createSliderWithStartValue(imageData) {
 
 
 function reinitializeSlider(imageData) {
-  
     if (slider.innerHTML.trim() === '') {
         createSliderWithStartValue(imageData)
     } else{

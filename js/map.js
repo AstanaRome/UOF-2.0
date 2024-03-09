@@ -114,16 +114,14 @@ function createFootprintGroup(imageDataArray) {
 }
 
 
-function createOneFootprint(oneImage) {
-    const coordinates = oneImage.getCoordinatesForFootprint();   
+function createOneFootprint(topLeft, topRight, bottomLeft) {
     removeOneLayerFromMap(oneFootprint);   
-    oneFootprint = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+    oneFootprint = L.imageOverlay.rotated("icon.svg", topLeft, topRight, bottomLeft, {
         opacity: 1,
         interactive: true,
     });
     oneFootprint.setZIndex(400);
     oneFootprint.addTo(map);
-
 }
 
 function createOneQuicklook(oneImage){
@@ -228,7 +226,7 @@ function zoomToImage(image) {
 }
 
 
-export { map, footprintLayers, quicklookLayers, removeLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
+export { map, footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
     createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage };
 // Использование функции
 

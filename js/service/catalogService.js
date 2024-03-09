@@ -111,15 +111,18 @@ function fetchImageByIDforKazEOSat1(imageID) {
         const foundImage2 = data.data.find(item => item.Code === imageID);
         if (foundImage2) {
             foundImage = new SatelliteImage(foundImage2);
+            
             foundImage.calculateLines(foundImage2.Quicklook)
                 .then(lines => {
                     foundImage.Lines = lines;
-                    createOneFootprint(foundImage);
+                    inputLineMax.value = foundImage.Lines;
                     createOneQuicklook(foundImage);
                     zoomToImage(foundImage);
                     reinitializeSlider(foundImage);
-                    inputFirstLineNum.value = 1;
-                    inputLineMax.value = foundImage.Lines;
+                     // const coordinates = foundImage.getCoordinatesForFootprint();
+                  
+                   // createOneFootprint(coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft);  
+                    
                 })
                 .catch(error => {
                     console.error('Ошибка при вычислении lines:', error.message);
@@ -132,6 +135,7 @@ function fetchImageByIDforKazEOSat1(imageID) {
     .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
     });
+    
 }
 
 function fetchImageByIDforKazEOSat2(imageID) {
@@ -185,7 +189,8 @@ function fetchImageByIDforKazEOSat2(imageID) {
         if (foundImage2) {
             console.log(foundImage2.Meta_Date)
             foundImage = new SatelliteImage(foundImage2);        
-                    createOneFootprint(foundImage);
+            const coordinates = foundImage.getCoordinatesForFootprint();
+            createOneFootprint(coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft);  
                     createOneQuicklook(foundImage);
                     zoomToImage(foundImage);              
         } else {
