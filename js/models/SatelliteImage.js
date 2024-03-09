@@ -14,10 +14,14 @@ export default class SatelliteImage {
         this.IsChecked = data.IsChecked || false;
         this.IsVisibleOnMap = data.IsVisibleOnMap || false;
         this.Lines = null;
+        this.LineToKm = null;
           if (data.Code.startsWith('DS_')) {
               this.calculateLines(data.Quicklook)
                   .then(lines => {
-                      this.Lines = lines;                
+                      this.Lines = lines;  
+                      const numberArray = this.Coordinates.split(' ').map(coord => parseFloat(coord));
+                      let imageToKm = calculateDistance(numberArray[2], numberArray[3], numberArray[0], numberArray[1])
+                      this.LineToKm = imageToKm / lines;
                   })
                   .catch(error => {
                       console.error('Ошибка при вычислении lines:', error.message);
@@ -89,3 +93,27 @@ function getImageSize(url) {
         img.src = url;
     });
 }
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const earthRadius = 6371; // Радиус Земли в километрах
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = earthRadius * c;
+    return distance;
+}
+
+function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+
+

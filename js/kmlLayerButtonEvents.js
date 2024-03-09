@@ -1,6 +1,6 @@
 
 import { map, removeLayerFromMap } from './map.js';
-import { searchOneImage } from './service/catalogService.js';
+import { foundImage, searchOneImage } from './service/catalogService.js';
 
 const kmlLayerGroup = L.layerGroup().addTo(map);
 
@@ -108,8 +108,40 @@ btnFind.addEventListener('click', function() {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    var openButton = document.getElementById('infoButton');
+    var infoBox = document.getElementById('infoBox');
+    var closeButton = document.getElementById('closeButton');
 
 
+    var infoContent = document.getElementById('infoContent');
+
+    openButton.addEventListener('click', function() {
+        
+    if (!foundImage) {
+        // Если данных нет, отображаем сообщение об отсутствии данных
+        infoContent.innerHTML = '<p>Нет данных для отображения.</p>';
+    } else {
+        var content = "<h2>Информация о снимке</h2>";
+        content += "<p>ID снимка: " + foundImage.Code + "</p>";
+        content += "<p>Дата снимка: " + foundImage.Meta_Date + "</p>";
+        content += "<p>Космический аппарат: " + foundImage.Satellite + "</p>";
+        if (foundImage.IncidenceAngle !== null) {
+            content += "<p>Угол съемки: " + foundImage.IncidenceAngle + " градусов</p>";
+        } else {
+        }
+        // Если данные есть, заполняем всплывающее окно этими данными
+        // Здесь добавьте код для заполнения информации из ваших данных
+        infoContent.innerHTML = content;
+    }
+        infoBox.style.display = 'block';
+
+    });
+
+    closeButton.addEventListener('click', function() {
+        infoBox.style.display = 'none';
+    });   
+});
 
 
 

@@ -135,9 +135,40 @@ html {
 		align-items: center; /* Выравниваем элементы по вертикали по центру */
 		height: 100%; /* Устанавливаем высоту родительского контейнера на 100% */
 	}
+	.input-container {
+		display: flex;
+		align-items: center;
+	}
+	
+	.input-container input {
+		margin-right: 10px; /* Отступ между полем ввода и кнопкой */
+	}
 	
 }
 
+
+.submit-button {
+    color: black;
+	border: 1px solid #ccc; /* Граница толщиной 1px */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#infoBox {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	border: 1px solid black;
+	padding: 20px;
+	z-index: 9999;
+}
+
+.submit-button:hover {
+    background-color: grey;
+}
 #sliderContainer {
     height: 100%; /* Устанавливаем высоту контейнера слайдера на 100% высоты родительского контейнера */
     display: flex; /* Устанавливаем родительский контейнер как flex-контейнер */
