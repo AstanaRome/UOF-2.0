@@ -5,8 +5,8 @@ import { reinitializeSlider } from "../utils/slider.js";
 const imageDataArray = []
 let foundImage;
 
-var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-//var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" 
+// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var path = "http://old-eo.gharysh.kz/CatalogService?DateFr=" 
    
 function searchCatalog(options) {
     // Проверка, переданы ли только координаты
@@ -115,7 +115,6 @@ function fetchImageByIDforKazEOSat1(imageID) {
             foundImage.calculateLines(foundImage2.Quicklook)
                 .then(lines => {
                     foundImage.Lines = lines;
-                    inputLineMax.value = foundImage.Lines;
                     createOneQuicklook(foundImage);
                     zoomToImage(foundImage);
                     reinitializeSlider(foundImage);

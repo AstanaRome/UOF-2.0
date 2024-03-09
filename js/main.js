@@ -4,6 +4,8 @@ import { createFootprintGroup, createQuicklookGroup, map, removeFromFootprintGro
 
 const inputFirstLineNum = document.getElementById('inputFirstLineNum');
 const inputLineMax = document.getElementById('inputLineCount');
+const inputCntLineAfterFirst = document.getElementById('inputCntLineAfterFirst');
+
 
 
 
@@ -191,4 +193,4 @@ function hoverOutAction(image) {
 }
 
 
-export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax };
+export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst };

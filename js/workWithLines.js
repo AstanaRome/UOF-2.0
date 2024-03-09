@@ -22,6 +22,8 @@ function endLine(enteredValue){
     if(value > foundImage.Lines){
         value = foundImage.Lines;
     }
+
+    
    // labelRes.textContent = "Numbers of lines: " + (inputEndLine.value - inputFirstLine.value + 1).toString();
 
     var diffDistance = value * foundImage.LineToKm;
@@ -35,7 +37,7 @@ function endLine(enteredValue){
     );
 
     if (newCoordTopLeft == undefined) {
-        createOneFootprint(footprintCoordinates.topLeft, footprintCoordinates.topRight, newCoordBottomLeft);
+        createOneFootprint(footprintCoordinates.topLeft, footprintCoordinates.topRight, newCoordBottomLeft);       
     } else {
         removeOneLayerFromMap(oneFootprint)
         createOneFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft);
@@ -56,8 +58,6 @@ function firstLine(enteredValue){
         // Если введенное значение превышает максимальное, устанавливаем максимальное значение
         inputFirstLineNum.value = inputLineMax.value - 623;
     }
-
-
     const footprintCoordinates = foundImage.getCoordinatesForFootprint();
     var diffDistance = inputFirstLineNum.value * foundImage.LineToKm;
 
@@ -80,9 +80,9 @@ function firstLine(enteredValue){
     if (newCoordBottomLeft == undefined) {
         createOneFootprint(newCoordTopLeft, newCoordTopRight, footprintCoordinates.bottomLeft);
     } else {
-        console.log(newCoordBottomLeft)
-        console.log(newCoordTopRight)
-        console.log(newCoordTopLeft)
+        // console.log(newCoordBottomLeft)
+        // console.log(newCoordTopRight)
+        // console.log(newCoordTopLeft)
         removeOneLayerFromMap(oneFootprint);
         createOneFootprint(newCoordTopLeft, newCoordTopRight, newCoordBottomLeft)
     }

@@ -1,4 +1,4 @@
-import { inputFirstLineNum, inputLineMax } from "../main.js";
+import { inputCntLineAfterFirst, inputFirstLineNum, inputLineMax } from "../main.js";
 import { foundImage } from "../service/catalogService.js";
 import { firstLine, endLine } from "../workWithLines.js";
 
@@ -42,9 +42,12 @@ function createSliderWithStartValue(imageData) {
         if (handle == 0){
             inputFirstLineNum.value = values[handle];
             firstLine(inputFirstLineNum.value)
+            inputCntLineAfterFirst.value = inputLineMax.value - inputFirstLineNum.value+1;
+            endLine(inputLineMax.value);
         }
         else{
             inputLineMax.value = values[handle]
+            inputCntLineAfterFirst.value = inputLineMax.value - inputFirstLineNum.value+1;
             endLine(inputLineMax.value)
         }
         //createFootprint();
