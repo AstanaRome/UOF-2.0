@@ -1,16 +1,22 @@
 import { imageDataArray, searchCatalog } from "./service/catalogService.js";
 import SearchOption from "./models/SearchOption.js"
 import SatelliteImage from "./models/SatelliteImage.js"
+import { map } from "./main.js";
 
 // Создание карты с использованием CartoDB
-const map = L.map('map', {
-    minZoom: 3,
-    maxZoom: 15
-}).setView([50, 70], 5);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap contributors, © CARTO'
-}).addTo(map);
+export function initMap() {
+    const map = L.map('map', {
+        minZoom: 3,
+        maxZoom: 15
+    }).setView([50, 70], 5);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap contributors, © CARTO'
+    }).addTo(map);
+
+    return map;
+}
 
 map.setMaxBounds([[90, -180], [-90, 180]]);
 
@@ -226,7 +232,7 @@ function zoomToImage(image) {
 }
 
 
-export { map, footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
+export { footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
     createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage };
 // Использование функции
 

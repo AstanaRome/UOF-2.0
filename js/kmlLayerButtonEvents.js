@@ -1,16 +1,68 @@
 
-import { inputFirstLineNum, inputLineMax, inputCntLineAfterFirst } from './main.js';
-import { map, removeLayerFromMap } from './map.js';
-import { foundImage, searchOneImage } from './service/catalogService.js';
+import { inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, map } from './main.js';
+import { removeLayerFromMap } from './map.js';
+import { foundImage, searchOneImage, searchCatalogForKmlKmz } from './service/catalogService.js';
 import { reinitializeSlider } from './utils/slider.js';
 import { endLine, firstLine} from './workWithLines.js';
+
 
 const kmlLayerGroup = L.layerGroup().addTo(map);
 const btnFind = document.getElementById('btnFind');
 const inputSatelliteId = document.getElementById('inputSatelliteId');
-
+let coordinatesFromKmlKmz = [];
 
 var kmlMapLayer = null
+
+function createTableForKmlKmz(coordinates){
+    const inputStartDate = document.getElementById('startDate').value;
+    const inputEndDate = document.getElementById('endDate').value;
+    const selectedSatellites = Array.from(document.querySelectorAll('input[name="satellite"]:checked'))
+        .map(checkbox => checkbox.value);
+
+
+    // Получаем угол
+ 
+    const angle = parseInt(document.getElementById('angle').value); // для целого числа
+    const boundingBox = getBoundingBox(coordinates); 
+    const searchOptions = {
+        dateFrom: inputStartDate,
+        dateTo: inputEndDate,
+        west: boundingBox.north,
+        east: boundingBox.east,
+        south: boundingBox.west,
+        north: boundingBox.south,
+        satellites: selectedSatellites, // Пример спутников
+        angle: angle // Пример угла съемки
+    };
+    searchCatalogForKmlKmz(searchOptions);
+}
+
+
+// Функция получения координат из KML
+function getCoordinatesFromKML(kml) {
+    const coordinates = [];
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(kml, "text/xml");
+    const placemarks = xmlDoc.getElementsByTagName('Placemark');
+    for (let i = 0; i < placemarks.length; i++) {
+        const coordinatesNode = placemarks[i].getElementsByTagName('coordinates')[0];
+        if (coordinatesNode) {
+            const coords = coordinatesNode.textContent.trim().split(' ');
+            coords.forEach((coord) => {
+                const parts = coord.split(',');
+                if (parts.length >= 2) {
+                    const lng = parseFloat(parts[0]);
+                    const lat = parseFloat(parts[1]);
+                    coordinates.push([lat, lng]); // Leaflet использует порядок широта, долгота
+                }
+            });
+        }
+    }
+    return coordinates;
+}
+
+
+
 
 document.getElementById('headerBtnKmlUpload').addEventListener('click', function () {
     const fileInput = document.createElement('input');
@@ -18,18 +70,14 @@ document.getElementById('headerBtnKmlUpload').addEventListener('click', function
     fileInput.setAttribute('accept', '.kml,.kmz');
     // Обработчик события выбора файла
     fileInput.addEventListener('change', function (event) {
-                
-
         const file = event.target.files[0];
-        
         if (file.name.endsWith('.kml')) {
             removeLayerFromMap(kmlLayerGroup)
             // Если выбран KML файл
             const reader = new FileReader();
             reader.onload = function (e) {
-                const kmlText = e.target.result;
-                // Загрузка и добавление KML на карту Leaflet
-                
+                let kmlText = e.target.result;
+                // Загрузка и добавление KML на карту Leaflet                
                 loadAndAddKML(kmlText);
             };
             reader.readAsText(file);
@@ -41,20 +89,25 @@ document.getElementById('headerBtnKmlUpload').addEventListener('click', function
                 const kmzData = e.target.result;
                 // Работа с KMZ данными
                 handleKMZData(kmzData);
+                
             };
+            
             reader.readAsArrayBuffer(file);
         }
-    });
 
+       
+
+    });
     // Нажатие на элемент input типа "file"
     fileInput.click();
 });
 
 // Функция загрузки и добавления KML на карту Leaflet
 function loadAndAddKML(kmlText) {
+    coordinatesFromKmlKmz = getCoordinatesFromKML(kmlText);
+    createTableForKmlKmz(coordinatesFromKmlKmz);
     const parser = new DOMParser();
     const kml = parser.parseFromString(kmlText, 'text/xml');
-
     // Удаление предыдущего слоя KML, если он существует
     if (kmlMapLayer) {
         map.removeLayer(kmlMapLayer);
@@ -67,15 +120,14 @@ function loadAndAddKML(kmlText) {
     kmlMapLayer.addTo(kmlLayerGroup);
 
     // Получение координат слоя
-    const coordinates = kmlMapLayer.getLatLngs();
-    console.log('Coordinates:', coordinates);
+    
 }
 
 // Функция обработки данных KMZ
 function handleKMZData(kmzData) {
     // Создание экземпляра JSZip и загрузка KMZ данных
     const zip = new JSZip();
-    zip.loadAsync(kmzData).then(function (zip) {
+    zip.loadAsync(kmzData).then(function(zip) {
         // Найдите KML файл в архиве KMZ
         const kmlFile = zip.file(/.*\.kml$/i)[0];
         if (kmlFile) {
@@ -83,16 +135,20 @@ function handleKMZData(kmzData) {
         } else {
             throw new Error("KML file not found in KMZ archive.");
         }
-    }).then(function (kmlContent) {
+    }).then(function(kmlContent) {
+        // Здесь мы используем функцию getCoordinatesFromKML для анализа KML и извлечения координат
+        coordinatesFromKmlKmz = getCoordinatesFromKML(kmlContent);
+        createTableForKmlKmz(coordinatesFromKmlKmz);
         // Преобразуйте XML KML в объект и добавьте на карту
         const parser = new DOMParser();
         const kml = parser.parseFromString(kmlContent, 'text/xml');
-        // Создание слоя KML
-        kmlMapLayer = new L.KML(kml);
+
+        // Создание слоя KML (этот код может потребоваться адаптировать в зависимости от вашей библиотеки)
+        kmlMapLayer = new L.KML(kml); // Обратите внимание, что вам может потребоваться специальный обработчик для L.KML, если он не является стандартной частью Leaflet.
         map.setView(kmlMapLayer.getBounds().getNorthWest(), 7);
         kmlMapLayer.setStyle({ color: 'blue', fillColor: 'blue' });
         kmlMapLayer.addTo(kmlLayerGroup);
-    }).catch(function (error) {
+    }).catch(function(error) {
         console.error(error);
     });
 }
@@ -150,14 +206,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-
-// inputLineMax.addEventListener('click', function () {
-//     const enteredValue = inputLineMax.value;
-//     inputCntLineAfterFirst.value = enteredValue;
-//     endLine(enteredValue);
-// });
-
 inputFirstLineNum.addEventListener('click', function () {
     const enteredValue = inputFirstLineNum.value;
     firstLine(enteredValue);
@@ -170,20 +218,32 @@ inputCntLineAfterFirst.addEventListener('click', function () {
 });
 
 
-function getCoordinatesFromKML(kml) {
-    const coordinates = [];
-    const placemarks = kml.getElementsByTagName('Placemark');
-    for (let i = 0; i < placemarks.length; i++) {
-        const coordinatesNode = placemarks[i].getElementsByTagName('coordinates')[0];
-        if (coordinatesNode) {
-            const coords = coordinatesNode.textContent.trim().split(',');
-            if (coords.length === 3) {
-                const [lng, lat] = coords;
-                coordinates.push([parseFloat(lat), parseFloat(lng)]);
-            }
-        }
-    }
-    return coordinates;
+
+
+
+
+// Функция для получения описывающего прямоугольника полигона
+function getBoundingBox(polygonCoordinates) {
+    let minLng = Infinity;
+    let maxLng = -Infinity;
+    let minLat = Infinity;
+    let maxLat = -Infinity;
+
+    polygonCoordinates.forEach(coord => {
+        const [lng, lat] = coord;
+        minLng = Math.min(minLng, lng);
+        maxLng = Math.max(maxLng, lng);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
+    });
+
+    return {
+        west: minLng,
+        east: maxLng,
+        south: minLat,
+        north: maxLat
+    };
 }
 
+export {coordinatesFromKmlKmz}
 // Функция очистки слоя KML

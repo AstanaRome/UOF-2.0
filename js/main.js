@@ -1,11 +1,16 @@
 
 
-import { createFootprintGroup, createQuicklookGroup, map, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
+import { createFootprintGroup, createQuicklookGroup, initMap, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
+
+export const map = initMap();
 
 const inputFirstLineNum = document.getElementById('inputFirstLineNum');
 const inputLineMax = document.getElementById('inputLineCount');
 const inputCntLineAfterFirst = document.getElementById('inputCntLineAfterFirst');
 
+
+
+// Инициализация карты и экспорт для использования в других модулях
 
 
 
