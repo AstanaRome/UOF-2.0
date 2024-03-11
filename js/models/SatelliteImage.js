@@ -53,7 +53,8 @@ export default class SatelliteImage {
             const topLeft = [numberArray[2], numberArray[3]];
             const topRight = [numberArray[4], numberArray[5]];
             const bottomRight = [numberArray[6], numberArray[7]];
-            return { bottomLeft, topLeft, topRight, bottomRight };
+            // Объединяем координаты в точку
+            return [bottomLeft, topLeft, topRight, bottomRight];
         }
         return null;
     }

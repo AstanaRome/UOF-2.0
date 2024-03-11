@@ -6,8 +6,8 @@ import { coordinatesFromKmlKmz } from "../kmlLayerButtonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
 
 function searchCatalogForKmlKmz(options) {
     // Проверка, переданы ли только координаты
@@ -28,8 +28,20 @@ function searchCatalogForKmlKmz(options) {
                 const satelliteImage = new SatelliteImage(item);
                 // Проверка по спутнику и углу
                 if (satellites.some(satellite => satellite === item.Satellite) && item.IncidenceAngle <= angle) {
-             
-                    imageDataArray.push(satelliteImage);     
+                    console.log(satelliteImage.getCoordinates())
+                    let satelliteImageCoordinates =  []
+                    satelliteImageCoordinates = satelliteImage.getCoordinates();
+                    satelliteImageCoordinates.push(satelliteImageCoordinates[0]) //[0] = satelliteImageCoordinates[4];
+                    const polygon1 = turf.polygon(
+                        [satelliteImageCoordinates]
+                    );
+                    // Геометрия второго полигона
+                    const polygon2 = turf.polygon([coordinatesFromKmlKmz]);       
+                    const intersection = turf.intersect(polygon1, polygon2);
+
+                    if (intersection) {
+                    imageDataArray.push(satelliteImage);
+                }    
                     // Дальнейшие действия с полученными данными
                 }
                                 // Дальнейшие действия с полученными данными

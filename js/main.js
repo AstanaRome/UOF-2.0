@@ -1,6 +1,7 @@
 
 
 import { createFootprintGroup, createQuicklookGroup, initMap, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
+//import { openInfoBox } from "./kmlLayerButtonEvents.js";
 
 export const map = initMap();
 
@@ -14,37 +15,6 @@ const inputCntLineAfterFirst = document.getElementById('inputCntLineAfterFirst')
 
 
 
-function createModal() {
-    // Создаем контейнер модального окна
-    const modal = document.createElement('div');
-    modal.id = 'myModal';
-    modal.className = 'modal';
-
-    // Создаем контент модального окна
-    const modalContent = document.createElement('div');
-    modalContent.className = 'modal-content';
-    modal.appendChild(modalContent);
-
-    // Создаем элемент для изображения Quicklook
-    const modalImage = document.createElement('img');
-    modalImage.id = 'modalImage';
-    modalContent.appendChild(modalImage);
-
-    // Создаем кнопку закрытия модального окна
-    const closeButton = document.createElement('span');
-    closeButton.className = 'close';
-    closeButton.innerHTML = '&times;';
-    closeButton.onclick = function() {
-        modal.style.display = 'none';
-    };
-    modalContent.appendChild(closeButton);
-
-    document.body.appendChild(modal);
-
-}
-
-// Вызываем функцию создания модального окна при загрузке страницы
-window.onload = createModal;
 
 
 function addInfoButtonToRow(row, image) {
@@ -56,10 +26,7 @@ function addInfoButtonToRow(row, image) {
 
     // Обработчик события нажатия на кнопку
     infoButton.addEventListener('click', () => {
-        const modal = document.getElementById('myModal');
-        const modalImg = document.getElementById('modalImage');
-        modalImg.src = image.Quicklook; // Устанавливаем источник изображения в модальном окне
-        modal.style.display = 'block'; // Показываем модальное окно
+   // openInfoBox(image);
     });
 
     infoCell.appendChild(infoButton);
@@ -87,15 +54,18 @@ function createCheckboxCell(image) {
 }
 
 function createQuicklookCell(image) {
+    const diameter = 50;
     let img = document.createElement('img');
     img.src = image.Quicklook;
-    img.style.width = '50px';
-    img.style.height = '50px';
-    img.style.objectFit = 'cover';
+    img.style.width = diameter + 'px';
+    img.style.height = diameter + 'px';
+    img.style.clipPath = 'circle(' + diameter / 2 + 'px at center)'; // Обрезаем изображение до круга без сохранения пропорций
     let quicklookCell = document.createElement('td');
     quicklookCell.appendChild(img);
     return quicklookCell;
 }
+
+
 
 function createTextCell(image, fontSize = '11px') {
     let cell = document.createElement('td');
