@@ -28,7 +28,6 @@ function searchCatalogForKmlKmz(options) {
                 const satelliteImage = new SatelliteImage(item);
                 // Проверка по спутнику и углу
                 if (satellites.some(satellite => satellite === item.Satellite) && item.IncidenceAngle <= angle) {
-                    console.log(satelliteImage.getCoordinates())
                     let satelliteImageCoordinates =  []
                     satelliteImageCoordinates = satelliteImage.getCoordinates();
                     satelliteImageCoordinates.push(satelliteImageCoordinates[0]) //[0] = satelliteImageCoordinates[4];

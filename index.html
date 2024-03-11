@@ -18,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
 
 
 
@@ -111,11 +113,16 @@
                     </div>
                     </div>
             <div id="imageData" class="data-container">
-                <h2>Таблица данных</h2>
+                <h2></h2>
                 <table id="dataTable">
                     <thead>
                         <tr>
-                            <th><i class="fa-solid fa-basket-shopping"></i></th> <!-- Галочка -->
+                            <th>
+                                <button class="basket-button" style="border: none; background: none;" id="btnDownloadCover">
+                                    <i class="fa-solid fa-basket-shopping" ></i>
+                                </button>
+                            </th>
+                            
                             <th><i class="fa-regular fa-image"></i></th> <!-- Quicklook -->
                             <th style="width: 75%;">Satellite ID</th> <!-- ID -->
                             <th><i class="fas fa-info-circle"></i></th> <!-- Information -->
@@ -130,10 +137,11 @@
             </div>
         </div>
     </div>
-    <!-- <script type="module" src="./js/main.js"type="text/javascript"></script> -->
+    <script type="module" src="./js/map.js" type="text/javascript" ></script>
+    <script type="module" src="./js/main.js"type="text/javascript"></script>
     <script type="module" src="./js/utils/L.KML.js" type="text/javascript" ></script>
     <script type="module" src="./js/utils/L.ImageOverlay.Rotated.js" type="text/javascript" ></script>
-    <script type="module" src="./js/map.js" type="text/javascript" ></script>
+    <!-- <script type="module" src="./js/main.js"type="text/javascript"></script> -->
     <script type="module" src="./js/utils/dateSetup.js" type="text/javascript"></script>
     <script type="module" src="./js/main.js"type="text/javascript"></script>
     <script type="module" src="./js/workWithLines.js"type="text/javascript"></script>

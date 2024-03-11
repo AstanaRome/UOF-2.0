@@ -1,18 +1,117 @@
-
-
 import { createFootprintGroup, createQuicklookGroup, initMap, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
-//import { openInfoBox } from "./kmlLayerButtonEvents.js";
-
+import { inputSatelliteId, openInfoBox } from "./kmlLayerButtonEvents.js";
+import { imageDataArray } from "./service/catalogService.js";
 export const map = initMap();
-
 const inputFirstLineNum = document.getElementById('inputFirstLineNum');
 const inputLineMax = document.getElementById('inputLineCount');
 const inputCntLineAfterFirst = document.getElementById('inputCntLineAfterFirst');
+const kmlLayerGroup = L.layerGroup().addTo(map);
+const btnDownloadCover = document.getElementById('btnDownloadCover');
+const copyButton = document.getElementById('copyButton');
 
+btnDownloadCover.addEventListener('click', donwloadCover);
+copyButton.addEventListener('click', copyText);
+
+
+inputFirstLineNum.addEventListener('click', function () {
+    const enteredValue = inputFirstLineNum.value;
+    firstLine(enteredValue);
+});
+
+inputCntLineAfterFirst.addEventListener('click', function () {
+    const enteredValue = inputCntLineAfterFirst.value;
+    // Здесь можно выполнить любые действия с введенным значением
+    endLine(enteredValue);
+});
+
+function copyText() {
+    var tempInput = document.createElement('input');
+    tempInput.value = inputSatelliteId.value + '\t' + inputFirstLineNum.value + '\t' + inputCntLineAfterFirst.value;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+
+    var notification = document.createElement('div'); 
+    notification.style.backgroundColor = 'grey';
+    notification.style.color = 'white';
+    notification.style.padding = '10px';
+    notification.style.position = 'fixed';
+    notification.style.top = '50%';
+    notification.style.left = '50%';
+    notification.style.transform = 'translate(-50%, -50%)';
+    notification.style.zIndex = '9999';
+    notification.style.borderRadius = '5px';
+    if(tempInput.value.trim()){
+        notification.textContent = 'Параметры снимка скопированы в буфер обмена';    
+} else{
+    notification.textContent = 'Поле поиска пусто';
+}
+    // Добавляем элемент на страницу
+    document.body.appendChild(notification);
+
+    // Через 3 секунды удаляем уведомление
+    setTimeout(function() {
+        document.body.removeChild(notification);
+    }, 1000);
+       
+        document.body.removeChild(tempInput);
+}
 
 
 // Инициализация карты и экспорт для использования в других модулях
 
+function donwloadCover(){
+    const inputStartDate = document.getElementById('startDate').value;
+    const inputEndDate = document.getElementById('endDate').value;
+    let kmlData = `<?xml version="1.0" encoding="UTF-8"?>
+        <kml xmlns="http://www.opengis.net/kml/2.2">
+            <Document>
+                <Folder>
+                    <name>${"Quicklook from " + inputStartDate + " to " + inputEndDate}</name>`;
+    
+    for (let i = 0; i < imageDataArray.length; i++) {
+        const imageData = imageDataArray[i];
+        if (imageData.IsChecked == true) {
+            const coords = imageData.getCoordinates();
+            const coordsReversed = [coords[0], coords[3], coords[2], coords[1], coords[0]];
+            
+            kmlData += `
+                <Folder><name>${imageData.Code}</name>
+                    <Placemark>
+                        <name>${imageData.Code}</name>
+                        <description>Incidence Angle: ${imageData.IncidenceAngle}, Satellite: ${imageData.Satellite}, Date: ${imageData.Meta_Date}</description>
+                        <Polygon>
+                            <outerBoundaryIs>
+                                <LinearRing>
+                                    <coordinates>
+                                        ${coords.map(coord => `${coord[1]},${coord[0]},0`).join('\n')}
+                                    </coordinates>
+                                </LinearRing>
+                            </outerBoundaryIs>
+                        </Polygon>
+                    </Placemark>            
+                    <GroundOverlay>
+                        <name>${imageData.Code}</name>
+                        <Icon>
+                            <href>${imageData.Quicklook}</href>
+                        </Icon>
+                        <gx:LatLonQuad xmlns:gx="http://www.google.com/kml/ext/2.2">
+                            <coordinates>
+                                ${coordsReversed.map(coord => `${coord[1]},${coord[0]},0`).join('\n')}
+                            </coordinates>
+                        </gx:LatLonQuad>
+                    </GroundOverlay>
+                </Folder>`;
+        }
+    }
+    
+    kmlData += `</Folder></Document></kml>`;
+    
+    // Создание и скачивание KML файла
+    const blob = new Blob([kmlData], { type: 'text/xml' });
+    saveAs(blob, `Quicklook from ${inputStartDate} to ${inputEndDate}.kml`);
+}
 
 
 
@@ -26,12 +125,23 @@ function addInfoButtonToRow(row, image) {
 
     // Обработчик события нажатия на кнопку
     infoButton.addEventListener('click', () => {
-   // openInfoBox(image);
+        const rows = document.querySelectorAll('tr.highlighted'); // Получаем все строки с классом подсветки
+        rows.forEach(row => {
+            row.classList.remove('highlighted'); // Удаляем класс подсветки
+            // row.style.backgroundColor = ''; // Если были применены стили, то их можно убрать
+        });
+
+        openInfoBox(image);
+        row.classList.add('highlighted'); // Добавляем класс подсветки к текущей строке
+        // row.style.backgroundColor = 'lightblue'; // Применяем стили подсветки к текущей строке
     });
 
     infoCell.appendChild(infoButton);
     row.appendChild(infoCell);
 }
+
+
+
 
 
 function createCheckboxCell(image) {
@@ -67,7 +177,7 @@ function createQuicklookCell(image) {
 
 
 
-function createTextCell(image, fontSize = '11px') {
+function createTextCell(image, fontSize = '16px') {
     let cell = document.createElement('td');
     cell.style.fontSize = fontSize;
     cell.appendChild(document.createTextNode(image.Code));
@@ -167,5 +277,4 @@ function hoverOutAction(image) {
     removeFromFootprintGroupLayer(image.Code);
 }
 
-
-export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst };
+export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup };

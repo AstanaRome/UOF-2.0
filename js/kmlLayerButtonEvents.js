@@ -1,12 +1,12 @@
 
-import { inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, map } from './main.js';
+import { map, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup,  } from './main.js';
 import { removeLayerFromMap } from './map.js';
 import { foundImage, searchOneImage, searchCatalogForKmlKmz } from './service/catalogService.js';
 import { reinitializeSlider } from './utils/slider.js';
 import { endLine, firstLine} from './workWithLines.js';
 
 
-const kmlLayerGroup = L.layerGroup().addTo(map);
+
 const btnFind = document.getElementById('btnFind');
 const inputSatelliteId = document.getElementById('inputSatelliteId');
 let coordinatesFromKmlKmz = [];
@@ -172,16 +172,7 @@ btnFind.addEventListener('click', function() {
 
 
 
-inputFirstLineNum.addEventListener('click', function () {
-    const enteredValue = inputFirstLineNum.value;
-    firstLine(enteredValue);
-});
 
-inputCntLineAfterFirst.addEventListener('click', function () {
-    const enteredValue = inputCntLineAfterFirst.value;
-    // Здесь можно выполнить любые действия с введенным значением
-    endLine(enteredValue);
-});
 
 
 
@@ -248,5 +239,5 @@ function closeInfoBox() {
 
 
 
-export {coordinatesFromKmlKmz, openInfoBox, closeInfoBox}
+export {coordinatesFromKmlKmz, openInfoBox, closeInfoBox, inputSatelliteId}
 // Функция очистки слоя KML
