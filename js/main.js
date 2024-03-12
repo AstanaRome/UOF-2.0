@@ -1,4 +1,4 @@
-import { createFootprintGroup, createQuicklookGroup, initMap, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
+import { createFootprintGroup, createQuicklookGroup, initMap, oneFootprint, oneQucklook, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, removeLayerFromMap, removeOneLayerFromMap, zoomToImage } from "./map.js";
 import { inputSatelliteId, openInfoBox } from "./kmlLayerButtonEvents.js";
 import { imageDataArray, searchOneImage } from "./service/catalogService.js";
 export const map = initMap();
@@ -43,9 +43,9 @@ function copyText() {
     notification.style.zIndex = '9999';
     notification.style.borderRadius = '5px';
     if(tempInput.value.trim()){
-        notification.textContent = 'Параметры снимка скопированы в буфер обмена';    
+        notification.textContent = 'The image parameters have been copied to the clipboard';    
 } else{
-    notification.textContent = 'Поле поиска пусто';
+    notification.textContent = 'The search field is empty';
 }
     // Добавляем элемент на страницу
     document.body.appendChild(notification);
@@ -306,6 +306,17 @@ document.getElementById('itemCheck1').addEventListener('change', function() {
     });
 });
 
+document.getElementById('btnClear').addEventListener('click', function() {
+    // Очищаем значения указанных полей ввода
+    document.getElementById('inputSatelliteId').value = '';
+    document.getElementById('inputFirstLineNum').value = '';
+    document.getElementById('inputCntLineAfterFirst').value = '';
+    document.getElementById('inputLineCount').value = '';
+    
+    removeOneLayerFromMap(oneFootprint);
+    removeOneLayerFromMap(oneQucklook);
+    
 
+});
 
 export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup };

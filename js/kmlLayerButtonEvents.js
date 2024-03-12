@@ -216,14 +216,14 @@ function openInfoBox(imageData) {
     var infoBox = document.getElementById('infoBox')
     if (!imageData) {
         // Если данных нет, отображаем сообщение об отсутствии данных
-        infoContent.innerHTML = '<p>Нет данных для отображения.</p>';
+        infoContent.innerHTML = '<p>No data for show</p>';
     } else {
-        var content = "<h2>Информация о снимке</h2>";
-        content += "<p>ID снимка: " + imageData.Code + "</p>";
-        content += "<p>Дата снимка: " + imageData.Meta_Date + "</p>";
-        content += "<p>Космический аппарат: " + imageData.Satellite + "</p>";
+        var content = "<h2>Information about image</h2>";
+        content += "<p>ID image: " + imageData.Code + "</p>";
+        content += "<p>Imagery date: " + imageData.Meta_Date + "</p>";
+        content += "<p>Satellite: " + imageData.Satellite + "</p>";
         if (imageData.IncidenceAngle !== null) {
-            content += "<p>Угол съемки: " + imageData.IncidenceAngle + " градусов</p>";
+            content += "<p>Incididence angle: " + imageData.IncidenceAngle + "</p>";
         }
         // Если данные есть, заполняем всплывающее окно этими данными
         // Здесь добавьте код для заполнения информации из ваших данных

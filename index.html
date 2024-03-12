@@ -78,11 +78,12 @@
                         <div class="image-crop-container">
                             <div class="left">
                                 <div class="input-container">
-                                    <input type="text" id="inputSatelliteId" name="inputSatelliteId" placeholder="ID image">
-                                    <button id="btnFind" title="введите в поле ID снимка для отображения его на карте"><i class="fas fa-search"></i></button>
+                                    <input type="text" id="inputSatelliteId" name="inputSatelliteId" placeholder="ID image" autocomplete="off">
+                                    <button id="btnFind" title="Enter the snapshot ID in the field to display it on the map"><i class="fas fa-search"></i></button>
+                                    
                                     <div id="infoBox">
                                         <div id="infoContent"></div>
-                                        <button id="closeButton">Закрыть</button>
+                                        <button id="closeButton">Close</button>
                                     </div>
                                 </div>
                                
@@ -96,7 +97,8 @@
                                 </div>
                                 <button type="submit" id="infoButton" class="submit-button">  <i class="fas fa-info-circle"></i>   </button>
                                 
-                                <button id="copyButton" title="кликните для копирования ID снимка и длины в линиях"><i class="fas fa-copy"></i></button>
+                                <button id="copyButton" title="Click to copy the snapshot ID and the length in lines"><i class="fas fa-copy"></i></button>
+                                <button id="btnClear" title="Clear the input field"><i class="fas fa-times"></i></button>
 
 
                             </div>
