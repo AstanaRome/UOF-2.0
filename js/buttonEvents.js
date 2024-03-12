@@ -6,7 +6,7 @@ import { reinitializeSlider } from './utils/slider.js';
 import { endLine, firstLine} from './workWithLines.js';
 
 
-
+let geoJson;
 const btnFind = document.getElementById('btnFind');
 const inputSatelliteId = document.getElementById('inputSatelliteId');
 let coordinatesFromKmlKmz = [];
@@ -110,6 +110,7 @@ function loadAndAddKML(kmlText) {
     createTableForKmlKmz(coordinatesFromKmlKmz);
     const parser = new DOMParser();
     const kml = parser.parseFromString(kmlText, 'text/xml');
+    geoJson = toGeoJSON.kml(kml);
     // Удаление предыдущего слоя KML, если он существует
     if (kmlMapLayer) {
         map.removeLayer(kmlMapLayer);
@@ -117,8 +118,8 @@ function loadAndAddKML(kmlText) {
 
     // Создание нового слоя KML
     kmlMapLayer = new L.KML(kml);
-    map.setView(kmlMapLayer.getBounds().getNorthWest(), 7);
-    kmlMapLayer.setStyle({ color: 'blue', fillColor: 'lightseagreen' });
+    map.fitBounds(kmlMapLayer.getBounds());
+    kmlMapLayer.setStyle({ color: 'slateblue', fillColor: 'lightseagreen' });
     kmlMapLayer.addTo(kmlLayerGroup);
 
     // Получение координат слоя
@@ -144,11 +145,11 @@ function handleKMZData(kmzData) {
         // Преобразуйте XML KML в объект и добавьте на карту
         const parser = new DOMParser();
         const kml = parser.parseFromString(kmlContent, 'text/xml');
-
+        geoJson = toGeoJSON.kml(kml)
         // Создание слоя KML (этот код может потребоваться адаптировать в зависимости от вашей библиотеки)
         kmlMapLayer = new L.KML(kml); // Обратите внимание, что вам может потребоваться специальный обработчик для L.KML, если он не является стандартной частью Leaflet.
-        map.setView(kmlMapLayer.getBounds().getNorthWest(), 7);
-        kmlMapLayer.setStyle({ color: 'blue', fillColor: 'lightseagreen' });
+        map.fitBounds(kmlMapLayer.getBounds());
+        kmlMapLayer.setStyle({ color: 'slateblue', fillColor: 'lightseagreen' });
         kmlMapLayer.addTo(kmlLayerGroup);
     }).catch(function(error) {
         console.error(error);
@@ -241,5 +242,5 @@ function closeInfoBox() {
 
 
 
-export {coordinatesFromKmlKmz, openInfoBox, closeInfoBox, inputSatelliteId}
+export {coordinatesFromKmlKmz, openInfoBox, closeInfoBox, inputSatelliteId,  geoJson}
 // Функция очистки слоя KML

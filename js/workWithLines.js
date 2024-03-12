@@ -78,9 +78,6 @@ function firstLine(enteredValue){
     );
     
     if (newCoordBottomLeft == undefined) {
-        console.log(newCoordTopLeft)
-        console.log(newCoordTopRight)
-        console.log(footprintCoordinates.bottomLeft.lat)
         createOneFootprint(newCoordTopLeft, newCoordTopRight, [footprintCoordinates.bottomLeft.lat, footprintCoordinates.bottomLeft.lng]);
     } else {
         // console.log(newCoordBottomLeft)

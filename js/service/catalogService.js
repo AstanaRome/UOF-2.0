@@ -2,7 +2,7 @@ import SatelliteImage from "../models/SatelliteImage.js";
 import { fillTableWithSatelliteImages } from "../main.js";
 import { createFootprintGroup, createOneFootprint, createOneQuicklook, zoomToImage } from "../map.js";
 import { reinitializeSlider } from "../utils/slider.js";
-import { coordinatesFromKmlKmz } from "../buttonEvents.js";
+import { coordinatesFromKmlKmz, geoJson } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
@@ -28,22 +28,38 @@ function searchCatalogForKmlKmz(options) {
                 const satelliteImage = new SatelliteImage(item);
                 // Проверка по спутнику и углу
                 if (satellites.some(satellite => satellite === item.Satellite) && item.IncidenceAngle <= angle) {
-                    let satelliteImageCoordinates =  []
+                    let satelliteImageCoordinates = []
                     satelliteImageCoordinates = satelliteImage.getCoordinates();
                     satelliteImageCoordinates.push(satelliteImageCoordinates[0]) //[0] = satelliteImageCoordinates[4];
-                    const polygon1 = turf.polygon(
-                        [satelliteImageCoordinates]
-                    );
-                    // Геометрия второго полигона
-                    const polygon2 = turf.polygon([coordinatesFromKmlKmz]);       
-                    const intersection = turf.intersect(polygon1, polygon2);
+                    let correctedCoordinates = satelliteImageCoordinates.map(coord => [coord[1], coord[0]]);
 
-                    if (intersection) {
-                    imageDataArray.push(satelliteImage);
-                }    
+                    const polygon1 = turf.polygon(
+                        [correctedCoordinates]
+                    );
+                    // Предполагается, что geoJson - ваш объект FeatureCollection
+                    // Предполагается, что otherPolygon - это другой полигон, с которым нужно проверить пересечение
+                    geoJson.features.forEach(feature => {
+                        console.log(feature);
+                        if (feature.geometry && feature.geometry.type === 'Polygon') {
+                            const currentPolygon = turf.polygon(feature.geometry.coordinates);
+                            const intersection = turf.intersect(currentPolygon, polygon1);
+
+                            if (intersection) {
+                                console.log('Найдено пересечение с полигоном:', feature);
+                                imageDataArray.push(satelliteImage);
+                                // Вы можете выполнить нужные действия в случае обнаружения пересечения
+                                // Например, добавить фичу в новый GeoJSON объект или обработать иначе
+                            }
+                        } else {
+                            console.log('Фича не является полигоном или отсутствует геометрия:', feature);
+                        }
+                    });
+
+
+
                     // Дальнейшие действия с полученными данными
                 }
-                                // Дальнейшие действия с полученными данными
+                // Дальнейшие действия с полученными данными
             });
             // Дальнейшие действия с полученными данными
             //createFootprintGroup(imageDataArray);
@@ -113,7 +129,7 @@ async function searchOneImage(imageID) {
         console.error("Unknown satellite image ID format:", imageID);
     }
 
-    
+
 
 }
 

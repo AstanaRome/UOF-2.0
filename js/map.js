@@ -180,12 +180,14 @@ function createOneFootprint(topLeft, topRight, bottomLeft) {
     ];
     // Создание прямоугольного полигона и добавление его на карту
     oneFootprint = L.polygon(latlngs, {
-        color: 'green', // Цвет границы
+        color: '#00FF00', // Цвет границы
         fillColor: '#0000', // Цвет заливки (прозрачный)
         fillOpacity: 0, // Прозрачность заливки
         weight: 4 // Толщина границы
     }).addTo(map);
+    oneFootprint.setZIndex(450)
     oneFootprint.addTo(map);
+    
 }
 
 function createOneQuicklook(oneImage){
