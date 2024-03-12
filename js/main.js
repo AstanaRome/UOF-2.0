@@ -125,15 +125,14 @@ function addInfoButtonToRow(row, image) {
 
     // Обработчик события нажатия на кнопку
     infoButton.addEventListener('click', () => {
-        const rows = document.querySelectorAll('tr.highlighted'); // Получаем все строки с классом подсветки
-        rows.forEach(row => {
-            row.classList.remove('highlighted'); // Удаляем класс подсветки
-            // row.style.backgroundColor = ''; // Если были применены стили, то их можно убрать
-        });
+        // const rows = document.querySelectorAll('tr.highlighted'); // Получаем все строки с классом подсветки
+        // rows.forEach(row => {
+        //     row.classList.remove('highlighted'); // Удаляем класс подсветки
+        //     // row.style.backgroundColor = ''; // Если были применены стили, то их можно убрать
+        // });
 
         openInfoBox(image);
-        row.classList.add('highlighted'); // Добавляем класс подсветки к текущей строке
-        // row.style.backgroundColor = 'lightblue'; // Применяем стили подсветки к текущей строке
+       // row.classList.add('highlighted'); // Добавляем класс подсветки к текущей строке
     });
 
     infoCell.appendChild(infoButton);
@@ -213,7 +212,7 @@ function createVisibilityCell(image) {
         } else {
             // Иначе, если иконка показывает закрытый глаз, выполняем другую функцию
             // Например, скрываем объект на карте
-            removeFromQuicklookGroupLayer(image.Code)
+            removeFromQuicklookGroupLayer(image.Code + ".ql")
         }
     });
 
@@ -319,4 +318,4 @@ document.getElementById('btnClear').addEventListener('click', function() {
 
 });
 
-export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup };
+export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup, clickAction };

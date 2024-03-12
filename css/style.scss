@@ -161,17 +161,56 @@ h5{
     cursor: pointer;
 }
 
-#infoBox {
-	display: none;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: white;
-	border: 1px solid black;
-	padding: 20px;
-	z-index: 9999;
+#overlay {
+    display: none; /* Изначально скрыт */
+    position: fixed; /* Фиксированное позиционирование относительно окна браузера */
+    top: 0;
+    left: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный */
+    z-index: 9998; /* Z-индекс ниже, чем у infoBox, но выше, чем у остального контента */
 }
+
+#infoBox {
+    display: none; /* Изначально скрыт, отображается при вызове функции */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    padding: 20px;
+    z-index: 9999;
+    align-items: start; /* Выравниваем элементы по верху */
+	width: 60%;
+    max-width: 80%; /* Максимальная ширина окна */
+    max-height: 80vh; /* Максимальная высота окна */
+    overflow-y: auto;
+}
+
+#infoBox img {
+	width: 70%;
+    max-width: 60%; /* Максимальная ширина для изображения */
+    max-height: 100%; /* Ограничивает высоту изображения */
+    margin-right: 20px; /* Отступ справа от изображения до текста */
+}
+
+#infoContent {
+    overflow-y: auto; /* Добавляет вертикальную прокрутку для текстового содержимого */
+    max-height: 70vh; /* Ограничивает высоту текстового блока */
+}
+
+#closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 .highlighted {
     background-color: lightblue;
 }

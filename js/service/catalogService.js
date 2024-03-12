@@ -39,13 +39,11 @@ function searchCatalogForKmlKmz(options) {
                     // Предполагается, что geoJson - ваш объект FeatureCollection
                     // Предполагается, что otherPolygon - это другой полигон, с которым нужно проверить пересечение
                     geoJson.features.forEach(feature => {
-                        console.log(feature);
                         if (feature.geometry && feature.geometry.type === 'Polygon') {
                             const currentPolygon = turf.polygon(feature.geometry.coordinates);
                             const intersection = turf.intersect(currentPolygon, polygon1);
 
                             if (intersection) {
-                                console.log('Найдено пересечение с полигоном:', feature);
                                 imageDataArray.push(satelliteImage);
                                 // Вы можете выполнить нужные действия в случае обнаружения пересечения
                                 // Например, добавить фичу в новый GeoJSON объект или обработать иначе

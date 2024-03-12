@@ -26,6 +26,7 @@
 
 </head>
 <body>
+    <div id="overlay"></div>
   <div class="header">
     <!-- Див для логотипа -->
     <div class="header-section logo-section">
@@ -69,6 +70,7 @@
                             <label for="perusat1">PeruSat-1</label>
                         </div> -->
                     </div>
+                    
                     <div class="angle-selection">
                         <h6 class="filter-title">Incidence angle</h6>
                         <!-- Выбор угла снимка -->
@@ -83,9 +85,13 @@
                                     <button id="btnFind" title="Enter the snapshot ID in the field to display it on the map"><i class="fas fa-search"></i></button>
                                     
                                     <div id="infoBox">
+                                        <button id="closeButton" onclick="closeInfoBox()" aria-label="Close">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        <img id="infoImage" src="" alt="Image Preview">
                                         <div id="infoContent"></div>
-                                        <button id="closeButton">Close</button>
                                     </div>
+                                    
                                 </div>
                                
                                 <div>

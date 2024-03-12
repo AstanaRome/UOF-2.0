@@ -208,37 +208,41 @@ function getBoundingBox(polygonCoordinates) {
 
 var openButton = document.getElementById('infoButton');    
 var closeButton = document.getElementById('closeButton');
-openButton.addEventListener('click', () => openInfoBox(foundImage));
+openButton.addEventListener('click', () => openInfoBox(foundImage), );
 closeButton.addEventListener('click', closeInfoBox);
 
 // Функция для открытия информационного окна
 function openInfoBox(imageData) {
-
+    document.getElementById('overlay').style.display = 'block';
     var infoBox = document.getElementById('infoBox')
+    var infoImage = document.getElementById('infoImage');
     if (!imageData) {
         // Если данных нет, отображаем сообщение об отсутствии данных
         infoContent.innerHTML = '<p>No data for show</p>';
     } else {
-        var content = "<h2>Information about image</h2>";
-        content += "<p>ID image: " + imageData.Code + "</p>";
-        content += "<p>Imagery date: " + imageData.Meta_Date + "</p>";
-        content += "<p>Satellite: " + imageData.Satellite + "</p>";
+        infoImage.src = imageData.Quicklook; // предполагается, что у imageData есть поле imageUrl
+        infoImage.alt = "Image Preview"; // Можете установить более подходящий alt текст
+
+        var content = "<h2>IMAGE INFORMATION</h2>";
+        content += "<p><strong>ID image:</strong> " + imageData.Code + "</p>";
+        content += "<p><strong>Imagery date:</strong> " + imageData.Meta_Date + "</p>";
+        content += "<p><strong>Satellite:</strong> " + imageData.Satellite + "</p>";
         if (imageData.IncidenceAngle !== null) {
-            content += "<p>Incididence angle: " + imageData.IncidenceAngle + "</p>";
+            content += "<p><strong>Incidence angle:</strong> " + imageData.IncidenceAngle + "</p>";
         }
         // Если данные есть, заполняем всплывающее окно этими данными
-        // Здесь добавьте код для заполнения информации из ваших данных
         infoContent.innerHTML = content;
+
     }
-    infoBox.style.display = 'block';
+  
+    infoBox.style.display = 'flex';
 }
 
 // Функция для закрытия информационного окна
 function closeInfoBox() {
     infoBox.style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
 }
-
-// Добавляем обработчик события на кнопку "Открыть"
 
 
 

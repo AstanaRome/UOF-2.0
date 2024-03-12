@@ -1,12 +1,13 @@
 import { imageDataArray, searchCatalog } from "./service/catalogService.js";
 import SearchOption from "./models/SearchOption.js"
 import SatelliteImage from "./models/SatelliteImage.js"
-import { map } from "./main.js";
+import { clickAction, map } from "./main.js";
 
 // Создание карты с использованием CartoDB
 
 export function initMap() {
     const map = L.map('map', {
+        doubleClickZoom: false,
         minZoom: 3,
         maxZoom: 15
     }).setView([50, 70], 5);
@@ -22,26 +23,26 @@ map.setMaxBounds([[90, -180], [-90, 180]]);
 
 function createMouseCoordinatesControl() {
     var control = L.control({ position: 'bottomleft' });
-  
+
     control.onAdd = function (map) {
-        this._div = L.DomUtil.create('div', 'transparent-control mouse-coordinates-control');        
-      this._div.innerHTML = '';
-  
-      // Обработчик события при перемещении указателя мыши
-      map.on('mousemove', function (e) {
-        var coordinates = e.latlng; // Координаты хранятся в объекте "latlng"
-        var lat = coordinates.lat.toFixed(5); // Округление широты до 5 знаков после запятой
-        var lng = coordinates.lng.toFixed(5); // Округление долготы до 5 знаков после запятой
-        control._div.innerHTML = 'lat: ' + lat + ', lng: ' + lng;
-      });
-  
-      return this._div;
+        this._div = L.DomUtil.create('div', 'transparent-control mouse-coordinates-control');
+        this._div.innerHTML = '';
+
+        // Обработчик события при перемещении указателя мыши
+        map.on('mousemove', function (e) {
+            var coordinates = e.latlng; // Координаты хранятся в объекте "latlng"
+            var lat = coordinates.lat.toFixed(5); // Округление широты до 5 знаков после запятой
+            var lng = coordinates.lng.toFixed(5); // Округление долготы до 5 знаков после запятой
+            control._div.innerHTML = 'lat: ' + lat + ', lng: ' + lng;
+        });
+
+        return this._div;
     };
-  
+
     return control;
-  }
-  
-  createMouseCoordinatesControl().addTo(map);
+}
+
+createMouseCoordinatesControl().addTo(map);
 
 const footprintGroupLayer = L.layerGroup();
 const QuicklookGroupLayer = L.layerGroup();
@@ -124,49 +125,55 @@ map.on('draw:created', function (e) {
 
 
 function createFootprintGroup(imageDataArray) {
-    imageDataArray.forEach(imageData => {    
+    imageDataArray.forEach(imageData => {
 
-     
-    
+
+
         var latlngs = [
             imageData.getCoordinatesForFootprint().topLeft,
             imageData.getCoordinatesForFootprint().topRight,
             imageData.getCoordinatesForFootprint().bottomRight,
             imageData.getCoordinatesForFootprint().bottomLeft
         ];
-   
-            const footprintGroup = L.polygon(latlngs, {
-                color: 'blue', // Цвет границы //darkslate
-                fillColor: '#0000', // Цвет заливки (прозрачный)
-                fillOpacity: 0, // Прозрачность заливки
-                weight: 3 // Толщина границы
-            });
-            // Пример добавления всплывающего окна с названием изображения
-            footprintGroup.bindPopup(imageData.Code);
-            footprintGroup.on('click', () => {
-                document.querySelectorAll('#dataTable tr').forEach(row => {
-                    row.style.backgroundColor = ''; // Сброс цвета фона
-                });
 
-                // Выделяем соответствующую строку
-                const relatedRow = document.getElementById(`row-${imageData.Code}`);
-                if (relatedRow) {
-                    relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
-                    relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+        const footprintGroup = L.polygon(latlngs, {
+            color: 'lightcoral', // Цвет границы //darkslate
+            fillColor: '#0000', // Цвет заливки (прозрачный)
+            fillOpacity: 0, // Прозрачность заливки
+            weight: 3 // Толщина границы
+        });
+        // Пример добавления всплывающего окна с названием изображения
+        footprintGroup.bindPopup(imageData.Code);
+        footprintGroup.on('click', () => {
+            document.querySelectorAll('#dataTable tr').forEach(row => {
+                row.style.backgroundColor = ''; // Сброс цвета фона
             });
-            // Добавление слоя footprintGroup в общий слой footprintGroupLayer
-            footprintGroupLayer.addLayer(footprintGroup);
-            footprintLayers[imageData.Code] = footprintGroup;
-     
+           
+            // Выделяем соответствующую строку
+            const relatedRow = document.getElementById(`row-${imageData.Code}`);
+            if (relatedRow) {
+                relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
+                relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+
+        footprintGroup.on('dblclick', () => {
+            clickAction(imageData)
+
+        });
+        // Добавление слоя footprintGroup в общий слой footprintGroupLayer
+        footprintGroupLayer.addLayer(footprintGroup);
+        footprintLayers[imageData.Code] = footprintGroup;
+
     });
 
 }
 
 
 function createOneFootprint(topLeft, topRight, bottomLeft) {
-    removeOneLayerFromMap(oneFootprint);   
-   
+    removeOneLayerFromMap(oneFootprint);
+
     var bottomRight = [
         topRight[0] + bottomLeft[0] - topLeft[0], // x4 = x2 + x3 - x1
         topRight[1] + bottomLeft[1] - topLeft[1]  // y4 = y2 + y3 - y1
@@ -185,14 +192,13 @@ function createOneFootprint(topLeft, topRight, bottomLeft) {
         fillOpacity: 0, // Прозрачность заливки
         weight: 4 // Толщина границы
     }).addTo(map);
-    oneFootprint.setZIndex(450)
     oneFootprint.addTo(map);
-    
+
 }
 
-function createOneQuicklook(oneImage){
-    removeOneLayerFromMap(oneQucklook);  
-    const coordinates = oneImage.getCoordinatesForFootprint();      
+function createOneQuicklook(oneImage) {
+    removeOneLayerFromMap(oneQucklook);
+    const coordinates = oneImage.getCoordinatesForFootprint();
     oneQucklook = L.imageOverlay.rotated(oneImage.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
         opacity: 1,
         interactive: true,
@@ -205,31 +211,31 @@ function createOneQuicklook(oneImage){
 
 
 function createQuicklookGroup(imagesDataArray) {
-    imagesDataArray.forEach(imageData => {    
-            const coordinates = imageData.getCoordinatesForFootprint();  
-            const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
-                opacity: 1,
-                interactive: true,
+    imagesDataArray.forEach(imageData => {
+        const coordinates = imageData.getCoordinatesForFootprint();
+        const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+            opacity: 1,
+            interactive: true,
+        });
+        QuicklookGroup.setZIndex(401);
+        // Пример добавления всплывающего окна с названием изображения
+        QuicklookGroup.bindPopup(imageData.Code);
+        QuicklookGroup.on('click', () => {
+            document.querySelectorAll('#dataTable tr').forEach(row => {
+                row.style.backgroundColor = ''; // Сброс цвета фона
             });
-            QuicklookGroup.setZIndex(400);
-            // Пример добавления всплывающего окна с названием изображения
-            QuicklookGroup.bindPopup(imageData.Code);
-            QuicklookGroup.on('click', () => {
-                document.querySelectorAll('#dataTable tr').forEach(row => {
-                    row.style.backgroundColor = ''; // Сброс цвета фона
-                });
 
-                // Выделяем соответствующую строку
-                const relatedRow = document.getElementById(`row-${imageData.Code}`);
-                if (relatedRow) {
-                    relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
-                    relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            });
-            // Добавление слоя footprintGroup в общий слой footprintGroupLayer
-            QuicklookGroupLayer.addLayer(QuicklookGroup);
-            quicklookLayers[imageData.Code] = QuicklookGroup;
-     
+            // Выделяем соответствующую строку
+            const relatedRow = document.getElementById(`row-${imageData.Code}`);
+            if (relatedRow) {
+                relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
+                relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+        // Добавление слоя footprintGroup в общий слой footprintGroupLayer
+        QuicklookGroupLayer.addLayer(QuicklookGroup);
+        quicklookLayers[imageData.Code + ".ql"] = QuicklookGroup;
+
     });
 
 }
@@ -288,12 +294,14 @@ function zoomToImage(image) {
     const centerLng = sumLng / (splitCoords.length / 2);
 
     // Установка центра карты и зума
-    map.setView([centerLat, centerLng], currentZoom); 
+    map.setView([centerLat, centerLng], currentZoom);
 }
 
 
-export { footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
-    createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage, footprintGroupLayer, QuicklookGroupLayer };
+export {
+    footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer,
+    createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage, footprintGroupLayer, QuicklookGroupLayer
+};
 // Использование функции
 
 
