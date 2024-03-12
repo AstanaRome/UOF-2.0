@@ -1,6 +1,6 @@
 
 import { map, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup,  } from './main.js';
-import { removeLayerFromMap } from './map.js';
+import { QuicklookGroupLayer, footprintGroupLayer, removeLayerFromMap } from './map.js';
 import { foundImage, searchOneImage, searchCatalogForKmlKmz } from './service/catalogService.js';
 import { reinitializeSlider } from './utils/slider.js';
 import { endLine, firstLine} from './workWithLines.js';
@@ -35,6 +35,8 @@ function createTableForKmlKmz(coordinates){
         angle: angle // Пример угла съемки
     };
     searchCatalogForKmlKmz(searchOptions);
+    removeLayerFromMap(QuicklookGroupLayer);
+    removeLayerFromMap(footprintGroupLayer);
 }
 
 

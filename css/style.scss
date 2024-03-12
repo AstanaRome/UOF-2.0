@@ -25,6 +25,12 @@ html {
 	width: 100%;
 	font-family: $font-family_1;
 }
+
+h5{
+	font-weight: bold;
+}
+
+
 .container {
 	display: flex;
 	height: calc(100% - 50px);

@@ -105,10 +105,6 @@ function searchCatalog(options) {
 
 async function searchOneImage(imageID) {
 
-
-
-
-
     if (imageID.startsWith("DS_")) {
         fetchImageByIDforKazEOSat1(imageID);
     } else if (imageID.startsWith("KM")) {
@@ -117,6 +113,7 @@ async function searchOneImage(imageID) {
         console.error("Unknown satellite image ID format:", imageID);
     }
 
+    
 
 }
 

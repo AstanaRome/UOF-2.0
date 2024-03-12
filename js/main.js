@@ -1,6 +1,6 @@
 import { createFootprintGroup, createQuicklookGroup, initMap, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, zoomToImage } from "./map.js";
 import { inputSatelliteId, openInfoBox } from "./kmlLayerButtonEvents.js";
-import { imageDataArray } from "./service/catalogService.js";
+import { imageDataArray, searchOneImage } from "./service/catalogService.js";
 export const map = initMap();
 const inputFirstLineNum = document.getElementById('inputFirstLineNum');
 const inputLineMax = document.getElementById('inputLineCount');
@@ -147,6 +147,7 @@ function addInfoButtonToRow(row, image) {
 function createCheckboxCell(image) {
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
+    checkbox.className = 'slaveCheckbox'; // Задаем класс
     checkbox.checked = image.IsChecked;
 
     checkbox.addEventListener('change', (e) => {
@@ -162,6 +163,7 @@ function createCheckboxCell(image) {
     checkCell.appendChild(checkbox);
     return checkCell;
 }
+
 
 function createQuicklookCell(image) {
     const diameter = 50;
@@ -188,8 +190,13 @@ function createTextCell(image, fontSize = '16px') {
     // Создание обработчика события mouseout
     cell.addEventListener('mouseout', () => hoverOutAction(image));
 
+    // Добавление обработчика события клика
+    cell.addEventListener('click', () => clickAction(image));
+
     return cell;
 }
+
+
 
 function createVisibilityCell(image) {
     let visibilityIcon = document.createElement('i');
@@ -238,10 +245,12 @@ function createZoomCell(image) {
 
 
 function fillTableWithSatelliteImages(images) {
-    
+    document.getElementById('itemCheck1').checked = false;
+    const inputStartDate = document.getElementById('startDate').value;
+    const inputEndDate = document.getElementById('endDate').value;
     const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = ''; // Очистка содержимого tbody
-
+    document.getElementById('imagesTable').innerText = `For the period from ${inputStartDate} to ${inputEndDate}, ${images.length} images were found.`;
     images.forEach(image => {
         let row = document.createElement('tr');
         row.setAttribute('id', `row-${image.Code}`);
@@ -276,5 +285,27 @@ function hoverOutAction(image) {
     // В противном случае вызываем функцию удаления следа
     removeFromFootprintGroupLayer(image.Code);
 }
+
+
+function clickAction(image) {
+    searchOneImage(image.Code);
+    inputSatelliteId.value = image.Code;
+}
+
+
+
+document.getElementById('itemCheck1').addEventListener('change', function() {
+    var isChecked = this.checked;
+    // Теперь выбираем чекбоксы только с классом 'slaveCheckbox'
+    var checkboxes = document.querySelectorAll('input[type="checkbox"].slaveCheckbox');
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = isChecked;
+        // Триггерим событие 'change' для каждого чекбокса
+        checkbox.dispatchEvent(new Event('change'));
+    });
+});
+
+
 
 export { fillTableWithSatelliteImages, inputFirstLineNum, inputLineMax, inputCntLineAfterFirst, kmlLayerGroup };

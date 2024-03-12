@@ -18,6 +18,10 @@ html {
   font-family: "Roboto", sans-serif;
 }
 
+h5 {
+  font-weight: bold;
+}
+
 .container {
   display: flex;
   height: calc(100% - 50px);

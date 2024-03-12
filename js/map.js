@@ -96,7 +96,7 @@ function createFootprintGroup(imageDataArray) {
                 opacity: 1,
                 interactive: true,
             });
-            footprintGroup.setZIndex(400);
+            footprintGroup.setZIndex(401);
             // Пример добавления всплывающего окна с названием изображения
             footprintGroup.bindPopup(imageData.Code);
             footprintGroup.on('click', () => {
@@ -122,11 +122,11 @@ function createFootprintGroup(imageDataArray) {
 
 function createOneFootprint(topLeft, topRight, bottomLeft) {
     removeOneLayerFromMap(oneFootprint);   
-    oneFootprint = L.imageOverlay.rotated("icon.svg", topLeft, topRight, bottomLeft, {
+    oneFootprint = L.imageOverlay.rotated("icon green.svg", topLeft, topRight, bottomLeft, {
         opacity: 1,
         interactive: true,
     });
-    oneFootprint.setZIndex(400);
+    oneFootprint.setZIndex(402);
     oneFootprint.addTo(map);
 }
 
@@ -218,7 +218,7 @@ function removeFromQuicklookGroupLayer(code) {
 function zoomToImage(image) {
     const splitCoords = image.Coordinates.split(" ").map(Number);
     let sumLat = 0, sumLng = 0;
-
+    var currentZoom = map.getZoom();
     for (let i = 0; i < splitCoords.length; i += 2) {
         sumLat += splitCoords[i];
         sumLng += splitCoords[i + 1];
@@ -228,12 +228,12 @@ function zoomToImage(image) {
     const centerLng = sumLng / (splitCoords.length / 2);
 
     // Установка центра карты и зума
-    map.setView([centerLat, centerLng], 7); 
+    map.setView([centerLat, centerLng], currentZoom); 
 }
 
 
 export { footprintLayers, quicklookLayers, removeLayerFromMap, removeOneLayerFromMap, createFootprintGroup, removeFromFootprintGroupLayer, 
-    createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage };
+    createQuicklookGroup, removeFromQuicklookGroupLayer, oneFootprint, oneQucklook, createOneFootprint, createOneQuicklook, zoomToImage, footprintGroupLayer, QuicklookGroupLayer };
 // Использование функции
 
 

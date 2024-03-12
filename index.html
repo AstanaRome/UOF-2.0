@@ -33,9 +33,9 @@
 
     <!-- Див для дат -->
     <div class="header-section dates-section">
-        <label for="startDate" >Начальная дата:</label>
+        <label for="startDate" >Start Date:</label>
         <input type="date" id="startDate" class="date-input">
-        <label for="endDate">Конечная дата:</label>
+        <label for="endDate">End Date:</label>
         <input type="date" id="endDate" class="date-input">
     </div>
 
@@ -53,7 +53,7 @@
             <div class="processing-container">
                 <div class="filter-container">
                     <div class="satellite-selection">
-                        <h6 class="filter-title">Космический аппарат</h6>
+                        <h6 class="filter-title">Satellite</h6>
                         <!-- Выбор космического аппарата -->
                         <div>
                             <input type="checkbox" id="kazeosat1" name="satellite" value="KazEOSat-1" checked="true">
@@ -69,7 +69,7 @@
                         </div> -->
                     </div>
                     <div class="angle-selection">
-                        <h6 class="filter-title">Угол съемки</h6>
+                        <h6 class="filter-title">Incidence angle</h6>
                         <!-- Выбор угла снимка -->
                         <input type="number" id="angle" name="angle" min="0" max="45" step="1" value="45">
                     </div>
@@ -78,7 +78,7 @@
                         <div class="image-crop-container">
                             <div class="left">
                                 <div class="input-container">
-                                    <input type="text" id="inputSatelliteId" name="inputSatelliteId" placeholder="ID снимка">
+                                    <input type="text" id="inputSatelliteId" name="inputSatelliteId" placeholder="ID image">
                                     <button id="btnFind" title="введите в поле ID снимка для отображения его на карте"><i class="fas fa-search"></i></button>
                                     <div id="infoBox">
                                         <div id="infoContent"></div>
@@ -113,15 +113,20 @@
                     </div>
                     </div>
             <div id="imageData" class="data-container">
-                <h2></h2>
+                <h5 id="imagesTable"></h5>
+
                 <table id="dataTable">
                     <thead>
                         <tr>
                             <th>
                                 <button class="basket-button" style="border: none; background: none;" id="btnDownloadCover">
-                                    <i class="fa-solid fa-basket-shopping" ></i>
+                                    <i class="fa-solid fa-basket-shopping"></i>
                                 </button>
+                                <!-- Чекбокс рядом с кнопкой -->
+                                <input type="checkbox" class="item-checkbox" id="itemCheck1">
                             </th>
+                            
+                            
                             
                             <th><i class="fa-regular fa-image"></i></th> <!-- Quicklook -->
                             <th style="width: 75%;">Satellite ID</th> <!-- ID -->
