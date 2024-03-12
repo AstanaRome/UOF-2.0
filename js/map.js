@@ -20,6 +20,28 @@ export function initMap() {
 
 map.setMaxBounds([[90, -180], [-90, 180]]);
 
+function createMouseCoordinatesControl() {
+    var control = L.control({ position: 'bottomleft' });
+  
+    control.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'transparent-control mouse-coordinates-control');        
+      this._div.innerHTML = '';
+  
+      // Обработчик события при перемещении указателя мыши
+      map.on('mousemove', function (e) {
+        var coordinates = e.latlng; // Координаты хранятся в объекте "latlng"
+        var lat = coordinates.lat.toFixed(5); // Округление широты до 5 знаков после запятой
+        var lng = coordinates.lng.toFixed(5); // Округление долготы до 5 знаков после запятой
+        control._div.innerHTML = 'lat: ' + lat + ', lng: ' + lng;
+      });
+  
+      return this._div;
+    };
+  
+    return control;
+  }
+  
+  createMouseCoordinatesControl().addTo(map);
 
 const footprintGroupLayer = L.layerGroup();
 const QuicklookGroupLayer = L.layerGroup();
@@ -114,7 +136,7 @@ function createFootprintGroup(imageDataArray) {
         ];
    
             const footprintGroup = L.polygon(latlngs, {
-                color: 'blue', // Цвет границы
+                color: 'blue', // Цвет границы //darkslate
                 fillColor: '#0000', // Цвет заливки (прозрачный)
                 fillOpacity: 0, // Прозрачность заливки
                 weight: 3 // Толщина границы
