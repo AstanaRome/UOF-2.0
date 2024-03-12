@@ -39,19 +39,25 @@ map.addLayer(drawnItems);
 // Настройки для рисования полигонов (в данном случае - квадратов)
 var drawOptions = {
     draw: {
-        rectangle: {}, // Опции для квадрата (оставляем пустыми для включения)
+        rectangle: {
+            shapeOptions: {
+                color: '#808080', // Цвет границы
+                fillColor: '#0000', // Цвет заливки (прозрачный)
+                fillOpacity: 0, // Прозрачность заливки
+                weight: 5 // Толщина границы
+            }
+        },
         polygon: false, // Отключаем рисование полигонов (и других фигур)
         polyline: false, // Отключаем рисование линий
         circle: false, // Отключаем рисование кругов
         circlemarker: false, // Отключаем рисование маркеров-кругов
-        marker: false,
-
-
+        marker: false
         // Задайте другие опции для рисования здесь
     },
     edit: false,
     remove: false
 };
+
 
 var drawControl = new L.Control.Draw(drawOptions);
 map.addControl(drawControl);
@@ -66,6 +72,13 @@ map.on('draw:created', function (e) {
     removeLayerFromMap(QuicklookGroupLayer);
     removeLayerFromMap(footprintGroupLayer);
     layer = e.layer;
+    // layer.setStyle({
+    //     color: '#ff7800', // Цвет границы
+    //     fillColor: '#ff7800', // Цвет заливки
+    //     fillOpacity: 0.8, // Прозрачность заливки
+    //     weight: 2, // Толщина границы
+    // });
+
     drawnItems.addLayer(layer);
 
     var rectangle = layer.toGeoJSON();

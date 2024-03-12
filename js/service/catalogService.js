@@ -2,12 +2,12 @@ import SatelliteImage from "../models/SatelliteImage.js";
 import { fillTableWithSatelliteImages } from "../main.js";
 import { createFootprintGroup, createOneFootprint, createOneQuicklook, zoomToImage } from "../map.js";
 import { reinitializeSlider } from "../utils/slider.js";
-import { coordinatesFromKmlKmz } from "../kmlLayerButtonEvents.js";
+import { coordinatesFromKmlKmz } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
 
 function searchCatalogForKmlKmz(options) {
     // Проверка, переданы ли только координаты

@@ -1,5 +1,5 @@
 import { createFootprintGroup, createQuicklookGroup, initMap, oneFootprint, oneQucklook, removeFromFootprintGroupLayer, removeFromQuicklookGroupLayer, removeLayerFromMap, removeOneLayerFromMap, zoomToImage } from "./map.js";
-import { inputSatelliteId, openInfoBox } from "./kmlLayerButtonEvents.js";
+import { inputSatelliteId, openInfoBox } from "./buttonEvents.js";
 import { imageDataArray, searchOneImage } from "./service/catalogService.js";
 export const map = initMap();
 const inputFirstLineNum = document.getElementById('inputFirstLineNum');
