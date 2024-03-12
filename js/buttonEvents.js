@@ -118,7 +118,7 @@ function loadAndAddKML(kmlText) {
     // Создание нового слоя KML
     kmlMapLayer = new L.KML(kml);
     map.setView(kmlMapLayer.getBounds().getNorthWest(), 7);
-    kmlMapLayer.setStyle({ color: 'blue', fillColor: 'blue' });
+    kmlMapLayer.setStyle({ color: 'blue', fillColor: 'lightseagreen' });
     kmlMapLayer.addTo(kmlLayerGroup);
 
     // Получение координат слоя
@@ -148,7 +148,7 @@ function handleKMZData(kmzData) {
         // Создание слоя KML (этот код может потребоваться адаптировать в зависимости от вашей библиотеки)
         kmlMapLayer = new L.KML(kml); // Обратите внимание, что вам может потребоваться специальный обработчик для L.KML, если он не является стандартной частью Leaflet.
         map.setView(kmlMapLayer.getBounds().getNorthWest(), 7);
-        kmlMapLayer.setStyle({ color: 'blue', fillColor: 'blue' });
+        kmlMapLayer.setStyle({ color: 'blue', fillColor: 'lightseagreen' });
         kmlMapLayer.addTo(kmlLayerGroup);
     }).catch(function(error) {
         console.error(error);

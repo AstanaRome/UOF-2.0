@@ -103,6 +103,7 @@ function createSliderWithStartValue(imageData) {
 
 
 function reinitializeSlider(imageData) {
+    inputCntLineAfterFirst.value = imageData.Lines;
     if (slider.innerHTML.trim() === '') {
         createSliderWithStartValue(imageData)
     } else{

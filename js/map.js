@@ -103,13 +103,22 @@ map.on('draw:created', function (e) {
 
 function createFootprintGroup(imageDataArray) {
     imageDataArray.forEach(imageData => {    
-            const coordinates = imageData.getCoordinatesForFootprint();          
+
+     
+    
+        var latlngs = [
+            imageData.getCoordinatesForFootprint().topLeft,
+            imageData.getCoordinatesForFootprint().topRight,
+            imageData.getCoordinatesForFootprint().bottomRight,
+            imageData.getCoordinatesForFootprint().bottomLeft
+        ];
    
-            const footprintGroup = L.imageOverlay.rotated("icon.svg", coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
-                opacity: 1,
-                interactive: true,
+            const footprintGroup = L.polygon(latlngs, {
+                color: 'blue', // Цвет границы
+                fillColor: '#0000', // Цвет заливки (прозрачный)
+                fillOpacity: 0, // Прозрачность заливки
+                weight: 3 // Толщина границы
             });
-            footprintGroup.setZIndex(401);
             // Пример добавления всплывающего окна с названием изображения
             footprintGroup.bindPopup(imageData.Code);
             footprintGroup.on('click', () => {
@@ -135,11 +144,25 @@ function createFootprintGroup(imageDataArray) {
 
 function createOneFootprint(topLeft, topRight, bottomLeft) {
     removeOneLayerFromMap(oneFootprint);   
-    oneFootprint = L.imageOverlay.rotated("icon green.svg", topLeft, topRight, bottomLeft, {
-        opacity: 1,
-        interactive: true,
-    });
-    oneFootprint.setZIndex(402);
+   
+    var bottomRight = [
+        topRight[0] + bottomLeft[0] - topLeft[0], // x4 = x2 + x3 - x1
+        topRight[1] + bottomLeft[1] - topLeft[1]  // y4 = y2 + y3 - y1
+    ];
+
+    var latlngs = [
+        topLeft,
+        topRight,
+        bottomRight,
+        bottomLeft
+    ];
+    // Создание прямоугольного полигона и добавление его на карту
+    oneFootprint = L.polygon(latlngs, {
+        color: 'green', // Цвет границы
+        fillColor: '#0000', // Цвет заливки (прозрачный)
+        fillOpacity: 0, // Прозрачность заливки
+        weight: 4 // Толщина границы
+    }).addTo(map);
     oneFootprint.addTo(map);
 }
 
