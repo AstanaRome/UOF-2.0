@@ -6,8 +6,8 @@ import { coordinatesFromKmlKmz, geoJson } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
 
 function searchCatalogForKmlKmz(options) {
     // Проверка, переданы ли только координаты
@@ -44,10 +44,10 @@ function searchCatalogForKmlKmz(options) {
                             const intersection = turf.intersect(currentPolygon, polygon1);
 
                             if (intersection) {
-                                imageDataArray.push(satelliteImage);
-                                // Вы можете выполнить нужные действия в случае обнаружения пересечения
-                                // Например, добавить фичу в новый GeoJSON объект или обработать иначе
-                            }
+                                if (!imageDataArray.some(item => item.Code === satelliteImage.Code)) { // Предположим, уникальность определяется по ID
+                                    imageDataArray.push(satelliteImage);
+                                }
+                            } 
                         } else {
                             console.log('Фича не является полигоном или отсутствует геометрия:', feature);
                         }
