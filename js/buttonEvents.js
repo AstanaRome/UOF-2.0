@@ -46,21 +46,44 @@ function getCoordinatesFromKML(kml) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(kml, "text/xml");
     const placemarks = xmlDoc.getElementsByTagName('Placemark');
+
     for (let i = 0; i < placemarks.length; i++) {
-        const coordinatesNode = placemarks[i].getElementsByTagName('coordinates')[0];
-        if (coordinatesNode) {
-            const coords = coordinatesNode.textContent.trim().split(' ');
-            coords.forEach((coord) => {
-                const parts = coord.split(',');
-                if (parts.length >= 2) {
-                    const lng = parseFloat(parts[0]);
-                    const lat = parseFloat(parts[1]);
-                    coordinates.push([lat, lng]); // Leaflet использует порядок широта, долгота
-                }
-            });
+        // Обрабатываем MultiGeometry внутри Placemark
+        const multiGeometries = placemarks[i].getElementsByTagName('MultiGeometry');
+        
+        // Если в Placemark есть MultiGeometry
+        for (let j = 0; j < multiGeometries.length; j++) {
+            const polygons = multiGeometries[j].getElementsByTagName('Polygon');
+            // Извлекаем координаты из каждого Polygon внутри MultiGeometry
+            for (let k = 0; k < polygons.length; k++) {
+                const coordinatesNode = polygons[k].getElementsByTagName('coordinates')[0];
+                processCoordinatesNode(coordinatesNode, coordinates);
+            }
+        }
+
+        // Если в Placemark есть прямой Polygon (не в MultiGeometry)
+        const polygonsDirect = placemarks[i].getElementsByTagName('Polygon');
+        for (let m = 0; m < polygonsDirect.length; m++) {
+            const coordinatesNode = polygonsDirect[m].getElementsByTagName('coordinates')[0];
+            processCoordinatesNode(coordinatesNode, coordinates);
         }
     }
+
     return coordinates;
+}
+
+function processCoordinatesNode(coordinatesNode, coordinates) {
+    if (coordinatesNode) {
+        const coords = coordinatesNode.textContent.trim().split(' ');
+        coords.forEach((coord) => {
+            const parts = coord.split(',');
+            if (parts.length >= 2) {
+                const lng = parseFloat(parts[0]);
+                const lat = parseFloat(parts[1]);
+                coordinates.push([lat, lng]); // Leaflet использует порядок широта, долгота
+            }
+        });
+    }
 }
 
 

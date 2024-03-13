@@ -6,8 +6,8 @@ import { coordinatesFromKmlKmz, geoJson } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
 
 function searchCatalogForKmlKmz(options) {
     // Проверка, переданы ли только координаты
@@ -16,6 +16,7 @@ function searchCatalogForKmlKmz(options) {
     const { dateFrom, dateTo, west, east, south, north, satellites, angle } = options;
     // Формирование URL  
     const fullPath = path + dateFrom + "&DateTo=" + dateTo + "&West=" + west + "&East=" + east + "&South=" + south + "&North=" + north;
+   
     fetch(fullPath)
         .then(response => {
             if (!response.ok) {
@@ -25,6 +26,10 @@ function searchCatalogForKmlKmz(options) {
         })
         .then(data => {
             data.data.forEach(item => {
+                if (item.Code == "DS_DZHR1_202311240707121_KZ1_E065N48_011731"){
+                    console.log(item.Code)
+                }
+                // console.log(geoJson)
                 const satelliteImage = new SatelliteImage(item);
                 // Проверка по спутнику и углу
                 if (satellites.some(satellite => satellite === item.Satellite) && item.IncidenceAngle <= angle) {
@@ -38,20 +43,7 @@ function searchCatalogForKmlKmz(options) {
                     );
                     // Предполагается, что geoJson - ваш объект FeatureCollection
                     // Предполагается, что otherPolygon - это другой полигон, с которым нужно проверить пересечение
-                    geoJson.features.forEach(feature => {
-                        if (feature.geometry && feature.geometry.type === 'Polygon') {
-                            const currentPolygon = turf.polygon(feature.geometry.coordinates);
-                            const intersection = turf.intersect(currentPolygon, polygon1);
-
-                            if (intersection) {
-                                if (!imageDataArray.some(item => item.Code === satelliteImage.Code)) { // Предположим, уникальность определяется по ID
-                                    imageDataArray.push(satelliteImage);
-                                }
-                            } 
-                        } else {
-                            console.log('Фича не является полигоном или отсутствует геометрия:', feature);
-                        }
-                    });
+                    processFeatures(geoJson, polygon1, satelliteImage);
 
 
 
@@ -74,6 +66,40 @@ function searchCatalogForKmlKmz(options) {
         });
 }
 
+function checkIntersectionAndAdd(polygon, otherPolygon, satelliteImage) {
+    const intersection = turf.intersect(polygon, otherPolygon);
+    if (intersection && !imageDataArray.some(item => item.Code === satelliteImage.Code)) {
+        imageDataArray.push(satelliteImage);
+    }
+}
+
+function processGeometry(geometry, otherPolygon, satelliteImage) {
+    let turfGeometry;
+    if (geometry.type === 'Polygon') {
+        turfGeometry = turf.polygon(geometry.coordinates);
+        checkIntersectionAndAdd(turfGeometry, otherPolygon, satelliteImage);
+    } else if (geometry.type === 'MultiPolygon') {
+        turfGeometry = turf.multiPolygon(geometry.coordinates);
+        checkIntersectionAndAdd(turfGeometry, otherPolygon, satelliteImage);
+    }
+    // Если требуется, добавьте обработку других типов геометрий
+}
+
+function processFeature(feature, otherPolygon, satelliteImage) {
+    if (feature.geometry.type === 'GeometryCollection') {
+        feature.geometry.geometries.forEach(geometry => {
+            processGeometry(geometry, otherPolygon, satelliteImage); // Применяем функцию ко всем геометриям в коллекции
+        });
+    } else {
+        processGeometry(feature.geometry, otherPolygon, satelliteImage); // Прямая обработка для неколлекционных геометрий
+    }
+}
+
+function processFeatures(featureCollection, otherPolygon, satelliteImage) {
+    featureCollection.features.forEach(feature => {
+        processFeature(feature, otherPolygon, satelliteImage);
+    });
+}
 
 
 function searchCatalog(options) {
@@ -309,5 +335,9 @@ function findClosestValues(id, idDict) {
 
     return [prevValue, nextValue];
 }
+
+
+
+
 // Экспорт функций для использования в других модулях
 export { searchCatalog, imageDataArray, createFootprintGroup, searchOneImage, foundImage, searchCatalogForKmlKmz };
