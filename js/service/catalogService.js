@@ -6,10 +6,15 @@ import { coordinatesFromKmlKmz, geoJson } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
-var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+
+
+
 
 function searchCatalogForKmlKmz(options) {
+    showLoadingOverlay();
+   
     // Проверка, переданы ли только координаты
     imageDataArray.length = 0;
     // Формирование URL
@@ -25,10 +30,7 @@ function searchCatalogForKmlKmz(options) {
             return response.json();
         })
         .then(data => {
-            data.data.forEach(item => {
-                if (item.Code == "DS_DZHR1_202311240707121_KZ1_E065N48_011731"){
-                    console.log(item.Code)
-                }
+            data.data.forEach(item => {               
                 // console.log(geoJson)
                 const satelliteImage = new SatelliteImage(item);
                 // Проверка по спутнику и углу
@@ -58,11 +60,13 @@ function searchCatalogForKmlKmz(options) {
                 if (b.Code > a.Code) return 1;
                 return 0;
             });
-            fillTableWithSatelliteImages(imageDataArray)
+            fillTableWithSatelliteImages(imageDataArray);
+            hideLoadingOverlay();
         })
 
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
+            hideLoadingOverlay();
         });
 }
 
@@ -103,6 +107,7 @@ function processFeatures(featureCollection, otherPolygon, satelliteImage) {
 
 
 function searchCatalog(options) {
+    showLoadingOverlay();
     // Проверка, переданы ли только координаты
     imageDataArray.length = 0;
     // Формирование URL
@@ -134,17 +139,19 @@ function searchCatalog(options) {
                 if (b.Code > a.Code) return 1;
                 return 0;
             });
-            fillTableWithSatelliteImages(imageDataArray)
+            fillTableWithSatelliteImages(imageDataArray);
+            hideLoadingOverlay();
         })
 
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
+            hideLoadingOverlay();
         });
 }
 
 
 async function searchOneImage(imageID) {
-
+    imageID = imageID.replace(/\s+/g, '');
     if (imageID.startsWith("DS_")) {
         fetchImageByIDforKazEOSat1(imageID);
     } else if (imageID.startsWith("KM")) {
@@ -208,11 +215,12 @@ function fetchImageByIDforKazEOSat1(imageID) {
                     .then(lines => {
                         foundImage.Lines = lines;
                         createOneQuicklook(foundImage);
-                        zoomToImage(foundImage);
-                        reinitializeSlider(foundImage);
                         // const coordinates = foundImage.getCoordinatesForFootprint();
 
-                        // createOneFootprint(coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft);  
+                        // createOneFootprint(coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft); 
+                        zoomToImage(foundImage);
+                        reinitializeSlider(foundImage);
+                         
 
                     })
                     .catch(error => {
@@ -278,7 +286,6 @@ function fetchImageByIDforKazEOSat2(imageID) {
         .then(data => {
             const foundImage2 = data.data.find(item => item.Code === imageID);
             if (foundImage2) {
-                console.log(foundImage2.Meta_Date)
                 foundImage = new SatelliteImage(foundImage2);
                 const coordinates = foundImage.getCoordinatesForFootprint();
                 createOneFootprint(coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft);
@@ -336,7 +343,13 @@ function findClosestValues(id, idDict) {
     return [prevValue, nextValue];
 }
 
-
+function showLoadingOverlay() {
+    document.getElementById('loadingOverlay').style.display = 'flex';
+  }
+  
+  function hideLoadingOverlay() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
 
 
 // Экспорт функций для использования в других модулях

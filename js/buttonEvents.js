@@ -243,6 +243,8 @@ function openInfoBox(imageData) {
         // Если данных нет, отображаем сообщение об отсутствии данных
         infoContent.innerHTML = '<p>No data for show</p>';
     } else {
+        infoImage.style.filter = 'brightness(120%)';
+
         infoImage.src = imageData.Quicklook; // предполагается, что у imageData есть поле imageUrl
         infoImage.alt = "Image Preview"; // Можете установить более подходящий alt текст
 
@@ -251,6 +253,8 @@ function openInfoBox(imageData) {
         content += "<p><strong>Imagery date:</strong> " + imageData.Meta_Date + "</p>";
         content += "<p><strong>Satellite:</strong> " + imageData.Satellite + "</p>";
         if (imageData.IncidenceAngle !== null) {
+            content += "<p><strong>Pitch:</strong> " + imageData.Pitch + "</p>";
+            content += "<p><strong>Roll:</strong> " + imageData.Roll + "</p>";
             content += "<p><strong>Incidence angle:</strong> " + imageData.IncidenceAngle + "</p>";
         }
         // Если данные есть, заполняем всплывающее окно этими данными
@@ -267,7 +271,16 @@ function closeInfoBox() {
     document.getElementById('overlay').style.display = 'none';
 }
 
+document.getElementById('overlay').addEventListener('click', function(event) {
+    // Проверяем, что клик был не по infoBox и не по его дочерним элементам
+    var isClickInsideInfoBox = document.getElementById('infoBox').contains(event.target);
 
+    if (!isClickInsideInfoBox) {
+        // Скрываем overlay и infoBox, если клик был снаружи infoBox
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('infoBox').style.display = 'none';
+    }
+});
 
 export {coordinatesFromKmlKmz, openInfoBox, closeInfoBox, inputSatelliteId,  geoJson}
 // Функция очистки слоя KML

@@ -8,6 +8,8 @@ export default class SatelliteImage {
         this.North = data.North || null;
         this.Quicklook = data.Quicklook || null;
         this.Satellite = data.Satellite || null;
+        this.Pitch = data.Pitch || null;
+        this.Roll = data.Roll || null;
         this.South = data.South || null;
         this.IncidenceAngle = data.IncidenceAngle|| null;
         this.West = data.West || null;

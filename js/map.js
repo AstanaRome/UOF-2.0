@@ -1,4 +1,4 @@
-import { imageDataArray, searchCatalog } from "./service/catalogService.js";
+import { foundImage, imageDataArray, searchCatalog } from "./service/catalogService.js";
 import SearchOption from "./models/SearchOption.js"
 import SatelliteImage from "./models/SatelliteImage.js"
 import { clickAction, map } from "./main.js";
@@ -174,27 +174,47 @@ function createFootprintGroup(imageDataArray) {
 function createOneFootprint(topLeft, topRight, bottomLeft) {
     removeOneLayerFromMap(oneFootprint);
 
-    var bottomRight = [
-        topRight[0] + bottomLeft[0] - topLeft[0], // x4 = x2 + x3 - x1
-        topRight[1] + bottomLeft[1] - topLeft[1]  // y4 = y2 + y3 - y1
+    // Определение, является ли входной параметр объектом Leaflet или массивом
+    var isLeafletObject = topLeft.hasOwnProperty('lat') && topLeft.hasOwnProperty('lng');
+
+    var bottomRight;
+
+    if (isLeafletObject) {
+        // Если работаем с объектами Leaflet
+        bottomRight = {
+            lat: topRight.lat + bottomLeft.lat - topLeft.lat,
+            lng: topRight.lng + bottomLeft.lng - topLeft.lng
+        };
+    } else {
+        // Если работаем с массивами координат
+        bottomRight = [
+            topRight[0] + bottomLeft[0] - topLeft[0],
+            topRight[1] + bottomLeft[1] - topLeft[1]
+        ];
+    }
+
+    // Формирование массива координат для Leaflet, учитывая тип входных данных
+    var latlngs = isLeafletObject ? [
+        L.latLng(topLeft.lat, topLeft.lng),
+        L.latLng(topRight.lat, topRight.lng),
+        L.latLng(bottomRight.lat, bottomRight.lng),
+        L.latLng(bottomLeft.lat, bottomLeft.lng)
+    ] : [
+        L.latLng(topLeft[0], topLeft[1]),
+        L.latLng(topRight[0], topRight[1]),
+        L.latLng(bottomRight[0], bottomRight[1]),
+        L.latLng(bottomLeft[0], bottomLeft[1])
     ];
 
-    var latlngs = [
-        topLeft,
-        topRight,
-        bottomRight,
-        bottomLeft
-    ];
     // Создание прямоугольного полигона и добавление его на карту
     oneFootprint = L.polygon(latlngs, {
         color: '#00FF00', // Цвет границы
-        fillColor: '#0000', // Цвет заливки (прозрачный)
-        fillOpacity: 0, // Прозрачность заливки
+        fillColor: '#0000', // Цвет заливки
+        fillOpacity: 0.5, // Прозрачность заливки
         weight: 4 // Толщина границы
     }).addTo(map);
-    oneFootprint.addTo(map);
-
 }
+
 
 function createOneQuicklook(oneImage) {
     removeOneLayerFromMap(oneQucklook);

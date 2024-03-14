@@ -22,6 +22,36 @@ h5 {
   font-weight: bold;
 }
 
+#loadingOverlay {
+  position: fixed; /* Фиксированное позиционирование относительно окна браузера */
+  top: 0;
+  left: 0;
+  width: 100%; /* Покрытие всей ширины и высоты экрана */
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+  display: flex;
+  justify-content: center; /* Центрирование спиннера по горизонтали */
+  align-items: center; /* Центрирование спиннера по вертикали */
+  z-index: 1000; /* Убедитесь, что оверлей находится поверх других элементов */
+}
+
+.loadingSpinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db; /* Синий цвет верхней части круга */
+  border-radius: 50%; /* Скругление углов для создания круга */
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite; /* Анимация вращения */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .container {
   display: flex;
   height: calc(100% - 50px);
@@ -189,6 +219,7 @@ h5 {
   max-width: 60%; /* Максимальная ширина для изображения */
   max-height: 100%; /* Ограничивает высоту изображения */
   margin-right: 20px; /* Отступ справа от изображения до текста */
+  border: 4px solid lightseagreen;
 }
 
 #infoContent {
