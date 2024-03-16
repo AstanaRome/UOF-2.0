@@ -7,6 +7,7 @@ const imageDataArray = []
 let foundImage;
 
 var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var pat2 = "http://127.0.0.1:3000/" 
 // var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
 
 
@@ -105,6 +106,8 @@ function processFeatures(featureCollection, otherPolygon, satelliteImage) {
     });
 }
 
+var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var path2 = "http://127.0.0.1:3000/" 
 
 function searchCatalog(options) {
     showLoadingOverlay();
@@ -130,8 +133,88 @@ function searchCatalog(options) {
                     // Дальнейшие действия с полученными данными
                 }
 
+             
                 // Дальнейшие действия с полученными данными
             });
+
+            if (satellites.includes("PeruSat-1")){     
+                const startDate = dateFrom;
+                const endDate = dateTo;   
+              
+                const clientRectangle = {
+                    // topRight: { latitude: north, longitude: west },
+                    // topLeft: { latitude: east, longitude: north},
+                    // bottomRight: { latitude: south, longitude: west },
+                    // bottomLeft: { latitude: south, longitude: east }
+                    topRight: { latitude:  east, longitude: west },
+                    topLeft: { latitude:  east, longitude: north},
+                    bottomRight: { latitude: south, longitude: west },
+                    bottomLeft: { latitude: south, longitude: north }
+                };
+                const secondApiPath = path2;
+                const secondRequestData = {
+                    clientRectangle,
+                    startDate,
+                    endDate
+                };
+                //console.log(secondRequestData)
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(secondRequestData)
+                };
+    
+                // Отправка второго запроса
+                fetch(secondApiPath, requestOptions)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(secondApiData => {
+                        
+                        // Обработка данных второго запроса и добавление их в массив
+                        secondApiData.forEach(item => {
+                           console.log(item)
+                            // const Code = item.data_strip_id;
+                            // const IncidenceAngle = item.IncidenceAngle;
+
+                            // const coordPeru = [item.sw_corner_latitude, item.sw_corner_longitude, 
+                            //     item.se_corner_latitude, item.se_corner_longitude, 
+                            //     item.ne_corner_latitude, item.ne_corner_longitude, 
+                            //     item.nw_corner_latitude, item.nw_corner_longitude]
+
+                            // const QuicklookUrl = `https://cof.cnois.gob.pe/customer-office-quicklook/${item.data_strip_id}_QL.jpeg`;
+                            
+                            const data = {
+                                Code: item.data_strip_id,
+                                Coordinates: `${item.sw_corner_latitude} ${item.sw_corner_longitude} ${item.se_corner_latitude} ${item.se_corner_longitude} ${item.ne_corner_latitude} ${item.ne_corner_longitude} ${item.nw_corner_latitude} ${item.nw_corner_longitude}`,
+                                IncidenceAngle: item.IncidenceAngle,
+                                Quicklook: `https://cof.cnois.gob.pe/customer-office-quicklook/${item.data_strip_id}_QL.jpeg`
+                            };
+     
+
+                           const satelliteImage = new SatelliteImage(data);
+                           imageDataArray.push(satelliteImage);
+                        });
+    
+                        // Сортировка и отображение данных
+                        imageDataArray.sort((a, b) => {
+                            if (b.Code < a.Code) return -1;
+                            if (b.Code > a.Code) return 1;
+                            return 0;
+                        });
+                        fillTableWithSatelliteImages(imageDataArray);
+                        hideLoadingOverlay();
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with your second fetch operation:', error);
+                        hideLoadingOverlay();
+                    });
+                }
             // Дальнейшие действия с полученными данными
             //createFootprintGroup(imageDataArray);
             imageDataArray.sort((a, b) => {

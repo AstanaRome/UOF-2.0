@@ -128,7 +128,6 @@ function createFootprintGroup(imageDataArray) {
     imageDataArray.forEach(imageData => {
 
 
-
         var latlngs = [
             imageData.getCoordinatesForFootprint().topLeft,
             imageData.getCoordinatesForFootprint().topRight,
@@ -233,10 +232,15 @@ function createOneQuicklook(oneImage) {
 function createQuicklookGroup(imagesDataArray) {
     imagesDataArray.forEach(imageData => {
         const coordinates = imageData.getCoordinatesForFootprint();
-        const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+        console.log(imageData.getCoordinatesForFootprint())
+        const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.bottomRight, coordinates.topRight, coordinates.bottomLeft, {
             opacity: 1,
             interactive: true,
         });
+        // const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+        //     opacity: 1,
+        //     interactive: true,
+        // });
         QuicklookGroup.setZIndex(401);
         // Пример добавления всплывающего окна с названием изображения
         QuicklookGroup.bindPopup(imageData.Code);
