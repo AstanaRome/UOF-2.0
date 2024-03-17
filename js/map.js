@@ -145,6 +145,7 @@ function createFootprintGroup(imageDataArray) {
         });
         // Пример добавления всплывающего окна с названием изображения
         footprintGroup.bindPopup(imageData.Code);
+     
         footprintGroup.on('click', () => {
             document.querySelectorAll('#dataTable tr').forEach(row => {
                 row.style.backgroundColor = ''; // Сброс цвета фона
@@ -156,19 +157,39 @@ function createFootprintGroup(imageDataArray) {
                 relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
                 relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-            //toggleVisibility(imageData);
-        });
-        footprintGroup.on('click', () => {
             toggleVisibility(imageData);
         });
 
         footprintGroup.on('dblclick', () => {
+            
             clickAction(imageData);
         });
-        footprintGroup.on('mouseover', () => {
+        footprintGroup.on('mouseover', function(e) {
+            e.target.setStyle({
+                color: 'blue', // исходный цвет границы
+                fillColor: '#0000', // исходный цвет заливки (прозрачный)
+                fillOpacity: 0 // исходная прозрачность заливки
+            });
+
+
+            // document.querySelectorAll('#dataTable tr').forEach(row => {
+            //     row.style.backgroundColor = ''; // Сброс цвета фона
+            // });
+           
+            // // Выделяем соответствующую строку
+            // const relatedRow = document.getElementById(`row-${imageData.Code}`);
+            // if (relatedRow) {
+            //     relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
+            //     relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // }
            createQuicklookForMouse(imageData);
         });
-        footprintGroup.on('mouseout', () => {
+        footprintGroup.on('mouseout',  function(e) {
+            e.target.setStyle({
+                color: 'lightcoral', // исходный цвет границы
+                fillColor: '#0000', // исходный цвет заливки (прозрачный)
+                fillOpacity: 0 // исходная прозрачность заливки
+            });
             removeOneLayerFromMap(quicklookForMouse);
         });
 
