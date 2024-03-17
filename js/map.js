@@ -126,7 +126,7 @@ map.on('draw:created', function (e) {
 
 function createFootprintGroup(imageDataArray) {
     imageDataArray.forEach(imageData => {
-
+   
 
         var latlngs = [
             imageData.getCoordinatesForFootprint().topLeft,
@@ -154,6 +154,7 @@ function createFootprintGroup(imageDataArray) {
                 relatedRow.style.backgroundColor = '#ADD8E6'; // Светло-голубой цвет фона для выделения
                 relatedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+            //toggleVisibility(imageData);
         });
 
 
@@ -233,15 +234,15 @@ function createQuicklookGroup(imagesDataArray) {
     imagesDataArray.forEach(imageData => {
         const coordinates = imageData.getCoordinatesForFootprint();
         console.log(imageData.getCoordinatesForFootprint())
-        const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.bottomRight, coordinates.topRight, coordinates.bottomLeft, {
-            opacity: 1,
-            interactive: true,
-        });
-        // const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+        // const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.bottomRight, coordinates.topRight, coordinates.bottomLeft, {
         //     opacity: 1,
         //     interactive: true,
         // });
-        QuicklookGroup.setZIndex(401);
+        const QuicklookGroup = L.imageOverlay.rotated(imageData.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
+            opacity: 1,
+            interactive: true,
+        });
+       
         // Пример добавления всплывающего окна с названием изображения
         QuicklookGroup.bindPopup(imageData.Code);
         QuicklookGroup.on('click', () => {
@@ -268,6 +269,32 @@ function createQuicklookGroup(imagesDataArray) {
 
 
 
+// function toggleVisibility(image) {
+//     console.log("test")
+//     // Переключаем состояние видимости
+//     image.IsVisibleOnMap = !image.IsVisibleOnMap;
+   
+//     // Находим иконку видимости в DOM. Предполагается, что каждая иконка имеет уникальный data-атрибут или id, связанный с кодом изображения.
+//     // Например, предполагается, что вы добавили data-code атрибут при создании иконки
+//     const visibilityIcon = document.querySelector(`i[data-code="${image.Code}"]`);
+
+//     // Обновляем класс иконки в зависимости от нового состояния видимости
+//     if (visibilityIcon) { // Проверяем, нашлась ли иконка
+//         visibilityIcon.className = image.IsVisibleOnMap ? 'fas fa-eye' : 'fas fa-eye-slash';
+       
+//         if (visibilityIcon.className === 'fas fa-eye'){
+//             // Показываем объект на карте
+            
+//             createQuicklookGroup([image]);
+//         } else if (visibilityIcon.className === 'fas fa-eye-slash') { // Здесь мы явно указываем условие для скрытого объекта
+//             console.log("test")
+//             // Скрываем объект на карте
+//             removeFromQuicklookGroupLayer(image.Code + ".ql");
+//         }
+//     } else {
+//         console.error('Icon not found for', image.Code);
+//     }
+// }
 
 
 

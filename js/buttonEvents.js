@@ -142,7 +142,7 @@ function loadAndAddKML(kmlText) {
     // Создание нового слоя KML
     kmlMapLayer = new L.KML(kml);
     map.fitBounds(kmlMapLayer.getBounds());
-    kmlMapLayer.setStyle({ color: 'slateblue', fillColor: 'lightseagreen' });
+    kmlMapLayer.setStyle({ color: 'slateblue', fillColor: 'lightseagreen',   weight: 7});
     kmlMapLayer.addTo(kmlLayerGroup);
 
     // Получение координат слоя

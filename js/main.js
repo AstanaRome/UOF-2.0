@@ -190,7 +190,13 @@ function createTextCell(image, fontSize = '16px') {
     cell.addEventListener('mouseout', () => hoverOutAction(image));
 
     // Добавление обработчика события клика
-    cell.addEventListener('click', () => clickAction(image));
+    cell.addEventListener('click', () => {
+        zoomToImage(image);
+    });
+    cell.addEventListener('dblclick', () => {
+       clickAction(image)
+    });
+   // cell.addEventListener('click', () => clickAction(image));
 
     return cell;
 }
@@ -200,6 +206,8 @@ function createTextCell(image, fontSize = '16px') {
 function createVisibilityCell(image) {
     let visibilityIcon = document.createElement('i');
     visibilityIcon.className = image.IsVisibleOnMap ? 'fas fa-eye' : 'fas fa-eye-slash';
+    visibilityIcon.setAttribute('data-code', image.Code); // Добавляем атрибут data-code, чтобы связать иконку с конкретным объектом
+   
     visibilityIcon.style.cursor = 'pointer';
 
     visibilityIcon.addEventListener('click', () => {
