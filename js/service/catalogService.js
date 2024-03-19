@@ -6,10 +6,10 @@ import { coordinatesFromKmlKmz, geoJson } from "../buttonEvents.js";
 const imageDataArray = []
 let foundImage;
 
-// var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
+var path = "http://10.0.6.117:8001/CatalogService?DateFr=" 
 //var pat2 = "http://127.0.0.1:3000/" 
-var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
-// var path2 = "http://127.0.0.1:3000/" 
+// var path = "http://old-eo.gharysh.kz/CatalogService?DateFr="
+var path2 = "http://127.0.0.1:3000/" 
 
 
 
@@ -177,7 +177,6 @@ function searchCatalog(options) {
                         
                         // Обработка данных второго запроса и добавление их в массив
                         secondApiData.forEach(item => {
-                           console.log(item)
                             // const Code = item.data_strip_id;
                             // const IncidenceAngle = item.IncidenceAngle;
 
@@ -187,11 +186,13 @@ function searchCatalog(options) {
                             //     item.nw_corner_latitude, item.nw_corner_longitude]
 
                             // const QuicklookUrl = `https://cof.cnois.gob.pe/customer-office-quicklook/${item.data_strip_id}_QL.jpeg`;
-                            
+                            console.log(item.acquisition_end_date)
                             const data = {
                                 Code: item.data_strip_id,
                                 Coordinates: `${item.sw_corner_latitude} ${item.sw_corner_longitude} ${item.se_corner_latitude} ${item.se_corner_longitude} ${item.ne_corner_latitude} ${item.ne_corner_longitude} ${item.nw_corner_latitude} ${item.nw_corner_longitude}`,
-                                IncidenceAngle: item.IncidenceAngle,
+                                IncidenceAngle: item.incidence_angle,
+                                Satellite: item.satellite_name,                                
+                                Metadata_Date: item.acquisition_end_date.substring(0, 10),
                                 Quicklook: `https://cof.cnois.gob.pe/customer-office-quicklook/${item.data_strip_id}_QL.jpeg`
                             };
      
@@ -213,16 +214,18 @@ function searchCatalog(options) {
                         console.error('There was a problem with your second fetch operation:', error);
                         hideLoadingOverlay();
                     });
+                } else{
+                    imageDataArray.sort((a, b) => {
+                        if (b.Code < a.Code) return -1;
+                        if (b.Code > a.Code) return 1;
+                        return 0;
+                    });
+                    fillTableWithSatelliteImages(imageDataArray);
+                    hideLoadingOverlay();
                 }
             // Дальнейшие действия с полученными данными
             //createFootprintGroup(imageDataArray);
-            imageDataArray.sort((a, b) => {
-                if (b.Code < a.Code) return -1;
-                if (b.Code > a.Code) return 1;
-                return 0;
-            });
-            fillTableWithSatelliteImages(imageDataArray);
-            hideLoadingOverlay();
+     
         })
 
         .catch(error => {

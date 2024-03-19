@@ -264,8 +264,15 @@ function createQuicklookForMouse(oneImage) {
         opacity: 1,
         interactive: true,
     });
-    quicklookForMouse.addTo(map);
+
+
+
+    // quicklookForMouse = L.imageOverlay.rotated(oneImage.Quicklook, coordinates.bottomRight, coordinates.topRight, coordinates.bottomLeft, {
+    //     opacity: 1,
+    //     interactive: true,
+    // });
    
+    quicklookForMouse.addTo(map);
 }
 
 
