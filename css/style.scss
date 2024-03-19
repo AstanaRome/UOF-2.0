@@ -187,6 +187,16 @@ h5{
     cursor: pointer;
 }
 
+button {
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+	/* Другие базовые стили */
+  }
+
+button:hover {
+	background-color: #6a6b69; /* Изменение цвета фона */
+	box-shadow: 0 0 8px 2px rgba(0,0,0,0.2); /* Добавление тени для эффекта подсветки */
+	transform: scale(1.05);
+  }
 #overlay {
     display: none; /* Изначально скрыт */
     position: fixed; /* Фиксированное позиционирование относительно окна браузера */
