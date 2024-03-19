@@ -128,8 +128,8 @@ map.on('draw:created', function (e) {
 
 function createFootprintGroup(imageDataArray) {
     imageDataArray.forEach(imageData => {
-   
-
+        if (!footprintLayers.hasOwnProperty(imageData.Code)) {
+            
         var latlngs = [
             imageData.getCoordinatesForFootprint().topLeft,
             imageData.getCoordinatesForFootprint().topRight,
@@ -196,6 +196,8 @@ function createFootprintGroup(imageDataArray) {
         // Добавление слоя footprintGroup в общий слой footprintGroupLayer
         footprintGroupLayer.addLayer(footprintGroup);
         footprintLayers[imageData.Code] = footprintGroup;
+        } 
+
 
     });
 
