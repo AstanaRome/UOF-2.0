@@ -27,6 +27,13 @@
 </head>
 <body>
     <div id="overlay"></div>
+    <div id="errorModal" class="modal">
+        <!-- Содержимое модального окна -->
+        <div class="modal-content">
+          <span class="close-button">×</span>
+          <p id="errorText"></p>
+        </div>
+      </div>
     <div id="loadingOverlay" style="display: none;">
         <div class="loadingSpinner"></div>
       </div>
@@ -50,8 +57,6 @@
   
   </div>
 </div>
-
-
     <div class="container">
         <div id="map"></div>
         <div class="sidebar">

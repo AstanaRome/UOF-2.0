@@ -68,6 +68,7 @@ function searchCatalogForKmlKmz(options) {
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
             hideLoadingOverlay();
+            showErrorPopup("Unable to search the data. Correct the vector file or search manually using the rectangle tool.");
         });
 }
 
@@ -435,6 +436,39 @@ function showLoadingOverlay() {
   function hideLoadingOverlay() {
     document.getElementById('loadingOverlay').style.display = 'none';
   }
+
+
+  function showErrorPopup(errorMessage) {
+    // Создаем основной элемент всплывающего окна
+    const popup = document.createElement('div');
+    popup.style.position = 'fixed';
+    popup.style.left = '50%';
+    popup.style.top = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.padding = '20px';
+    popup.style.backgroundColor = 'white';
+    popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+    popup.style.zIndex = '1000';
+    popup.style.textAlign = 'center';
+    popup.style.borderRadius = '8px';
+    popup.style.border = "2px solid black";
+    // Добавляем текст ошибки
+    const message = document.createElement('p');
+    message.textContent = errorMessage;
+    popup.appendChild(message);
+
+    // Добавляем кнопку закрытия
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.style.marginTop = '20px';
+    closeButton.onclick = function() {
+        document.body.removeChild(popup);
+    };
+    popup.appendChild(closeButton);
+
+    // Добавляем всплывающее окно в body
+    document.body.appendChild(popup);
+}
 
 
 // Экспорт функций для использования в других модулях
