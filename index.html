@@ -134,7 +134,9 @@
 
                 <table id="dataTable">
                     <thead>
-                        <tr>
+                        <tr>                    <th><i class="fa-regular fa-image"></i></th> <!-- Quicklook -->
+                            <th style="width: 75%;">Satellite ID</th> <!-- ID -->
+                            <th><i class="fas fa-info-circle"></i></th> <!-- Information -->
                             <th>
                                 <button class="basket-button" style="border: 2px solid black; background: none;" id="btnDownloadCover" title="Click to donwload cheched quicklooks">
                                     <i class="fa-solid fa-download"></i>
@@ -142,13 +144,13 @@
                                 <!-- Чекбокс рядом с кнопкой -->
                                 <input type="checkbox" class="item-checkbox" id="itemCheck1">
                             </th>
-                            
-                            
-                            
-                            <th><i class="fa-regular fa-image"></i></th> <!-- Quicklook -->
-                            <th style="width: 75%;">Satellite ID</th> <!-- ID -->
-                            <th><i class="fas fa-info-circle"></i></th> <!-- Information -->
-                            <th><i class="fas fa-eye"></i></th> <!-- Visibility -->
+                            <th>
+                                
+                                <button class="checked-all-visible-footprints" style="border: 2px solid black; background: none;" id="btnCheckedVisibleFootrpints" title="Click to mark pictures that are visible on the map">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </th> <!-- Visibility -->
+                           
                             <th><i class="fas fa-search-location"></i></th> <!-- Zoom -->
                         </tr>
                     </thead>

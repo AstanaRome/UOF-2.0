@@ -170,7 +170,7 @@ function createQuicklookCell(image) {
     img.src = image.Quicklook;
     img.style.width = diameter + 'px';
     img.style.height = diameter + 'px';
-    img.style.clipPath = 'circle(' + diameter / 2 + 'px at center)'; // Обрезаем изображение до круга без сохранения пропорций
+    // img.style.clipPath = 'circle(' + diameter / 2 + 'px at center)'; // Обрезаем изображение до круга без сохранения пропорций
     let quicklookCell = document.createElement('td');
     quicklookCell.appendChild(img);
     return quicklookCell;
@@ -262,10 +262,11 @@ function fillTableWithSatelliteImages(images) {
         let row = document.createElement('tr');
         row.setAttribute('id', `row-${image.Code}`);
 
-        row.appendChild(createCheckboxCell(image));
+        
         row.appendChild(createQuicklookCell(image));
         row.appendChild(createTextCell(image));
         addInfoButtonToRow(row, image); 
+        row.appendChild(createCheckboxCell(image));
         row.appendChild(createVisibilityCell(image));
         row.appendChild(createZoomCell(image));
 
@@ -312,6 +313,32 @@ document.getElementById('itemCheck1').addEventListener('change', function() {
         checkbox.dispatchEvent(new Event('change'));
     });
 });
+
+
+
+document.getElementById('btnCheckedVisibleFootrpints').addEventListener('click', function() {
+    // Получаем все строки таблицы
+    const rows = document.getElementById('dataTable').querySelectorAll('tbody tr');
+
+    // Проходимся по каждой строке
+    rows.forEach(row => {
+        // Находим иконку видимости в строке
+        const visibilityIcon = row.querySelector('.fa-eye');
+        // Находим чекбокс в строке
+        const checkbox = row.querySelector('input[type="checkbox"].slaveCheckbox');
+
+        // Если иконка видимости есть и чекбокс найден
+        if (visibilityIcon && checkbox) {
+            // Отмечаем чекбокс
+            checkbox.checked = true;
+            // Триггерим событие 'change' для чекбокса, если нужно обработать это событие
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    });
+});
+
+
+
 
 document.getElementById('btnClear').addEventListener('click', function() {
     // Очищаем значения указанных полей ввода
