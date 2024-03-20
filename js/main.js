@@ -69,13 +69,13 @@ function donwloadCover(){
             <Document>
                 <Folder>
                     <name>${"Quicklook from " + inputStartDate + " to " + inputEndDate}</name>`;
-    
+    let codes = [];
     for (let i = 0; i < imageDataArray.length; i++) {
         const imageData = imageDataArray[i];
         if (imageData.IsChecked == true) {
             const coords = imageData.getCoordinates();
             const coordsReversed = [coords[0], coords[3], coords[2], coords[1], coords[0]];
-            
+            codes.push(imageData.Code);
             kmlData += `
                 <Folder><name>${imageData.Code}</name>
                     <Placemark>
@@ -111,6 +111,8 @@ function donwloadCover(){
     // Создание и скачивание KML файла
     const blob = new Blob([kmlData], { type: 'text/xml' });
     saveAs(blob, `Quicklook from ${inputStartDate} to ${inputEndDate}.kml`);
+    const codesBlob = new Blob([codes.join('\n')], { type: 'text/plain' });
+    saveAs(codesBlob, `Image Codes from ${inputStartDate} to ${inputEndDate}.txt`);
 }
 
 
