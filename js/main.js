@@ -217,10 +217,13 @@ function createVisibilityCell(image) {
             // Если иконка показывает открытый глаз, выполняем одну функцию
             // Например, показываем объект на карте
             createQuicklookGroup([image])
+            clickAction(image)
         } else {
             // Иначе, если иконка показывает закрытый глаз, выполняем другую функцию
             // Например, скрываем объект на карте
             removeFromQuicklookGroupLayer(image.Code + ".ql")
+            removeOneLayerFromMap(oneQucklook);
+
         }
     });
 
@@ -245,30 +248,35 @@ function createZoomCell(image) {
 
 
 
-
-
-
-
-
-
 function fillTableWithSatelliteImages(images) {
     document.getElementById('itemCheck1').checked = false;
     const inputStartDate = document.getElementById('startDate').value;
     const inputEndDate = document.getElementById('endDate').value;
     const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = ''; // Очистка содержимого tbody
+    let lastSelectedRow = null; // Для хранения последней выбранной строки
     document.getElementById('imagesTable').innerText = `For the period from ${inputStartDate} to ${inputEndDate}, ${images.length} images were found.`;
     images.forEach(image => {
         let row = document.createElement('tr');
         row.setAttribute('id', `row-${image.Code}`);
-
+        row.appendChild(createCheckboxCell(image));
+        row.appendChild(createVisibilityCell(image));
         
         row.appendChild(createQuicklookCell(image));
         row.appendChild(createTextCell(image));
         addInfoButtonToRow(row, image); 
-        row.appendChild(createCheckboxCell(image));
-        row.appendChild(createVisibilityCell(image));
+        
         row.appendChild(createZoomCell(image));
+
+        row.addEventListener('click', () => {
+            // Снимаем выделение с предыдущей выбранной строки, если она есть
+            if (lastSelectedRow) {
+                lastSelectedRow.style.backgroundColor = ''; // Вернуть к исходному цвету фона или к тому, что было до выделения
+            }
+            // Выделяем текущую строку
+            row.style.backgroundColor = 'lightblue'; // Или любой цвет, который вы хотите использовать
+            lastSelectedRow = row; // Сохраняем текущую строку как последнюю выбранную
+        });
 
         tableBody.appendChild(row);
     });

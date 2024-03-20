@@ -253,7 +253,7 @@ function createOneQuicklook(oneImage) {
     removeOneLayerFromMap(oneQucklook);
     const coordinates = oneImage.getCoordinatesForFootprint();
     oneQucklook = L.imageOverlay.rotated(oneImage.Quicklook, coordinates.topLeft, coordinates.topRight, coordinates.bottomLeft, {
-        opacity: 1,
+        opacity: 5,
         interactive: true,
     });
     oneQucklook.addTo(map);
